@@ -1,7 +1,13 @@
 import { ID, Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
-import { IUpdatePost, INewPost, INewUser, IUpdateUser, IAuthUser } from "@/types";
+import {
+  IUpdatePost,
+  INewPost,
+  INewUser,
+  IUpdateUser,
+  IAuthUser,
+} from "@/types";
 
 // ============================================================
 // AUTH
@@ -10,7 +16,7 @@ import { IUpdatePost, INewPost, INewUser, IUpdateUser, IAuthUser } from "@/types
 // ============================== SIGN UP
 
 function generateRandomUsername(name: string): string {
-  const randomSuffix = Math.floor(Math.random() * 10000); 
+  const randomSuffix = Math.floor(Math.random() * 10000);
   return `${name}_${randomSuffix}`;
 }
 
@@ -33,15 +39,17 @@ export async function createUserAccount(user: INewUser) {
       accountId: newAccount.$id,
       name: newAccount.name,
       email: newAccount.email,
-      username:generatedUsername,
+      username: generatedUsername,
       imageUrl: avatarUrl,
     });
 
     return newUser;
-  } catch (error:unknown) {
-     if (error instanceof Error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
       if (error.message === "Failed to fetch") {
-        throw new Error("Network error. Please check your internet connection.");
+        throw new Error(
+          "Network error. Please check your internet connection."
+        );
       }
       throw new Error(error.message || "An unexpected error occurred.");
     } else {
@@ -73,12 +81,32 @@ export async function saveUserToDB(user: {
 }
 
 // ============================== SIGN IN
-export async function signInAccount(user:IAuthUser) {
+export async function signInAccount(user: IAuthUser) {
   try {
-    const session = await account.createSession("kibebekevin@gmail.com","Kevykibbz4578");
+    const currentSession = await account
+      .getSession("current")
+      .catch(() => null);
+    if (currentSession) {
+      return currentSession;
+    }
+
+    const session = await account.createEmailPasswordSession(
+      user.email,
+      user.password
+    );
+
     return session;
-  } catch (error) {
-    console.log('api error:',error);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "Failed to fetch") {
+        throw new Error(
+          "Network error. Please check your internet connection."
+        );
+      }
+      throw new Error(error.message || "An unexpected error occurred.");
+    } else {
+      throw new Error("An unknown error occurred.");
+    }
   }
 }
 
@@ -90,6 +118,18 @@ export async function getAccount() {
     return currentAccount;
   } catch (error) {
     console.log(error);
+  }
+}
+
+// Function to check if the user is logged in
+export async function isUserLoggedIn() {
+  try {
+    const session = await account.getSession('current');
+    return !!session; // Returns true if session exists, false otherwise
+  } catch (error) {
+    // If an error occurs (e.g., session does not exist), return false
+    console.error('Error checking session:', error);
+    return false;
   }
 }
 

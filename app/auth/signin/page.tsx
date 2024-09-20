@@ -15,11 +15,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SigninValidation } from "@/lib/validation";
-import { signInAccount } from "@/lib/appwrite/api";
+import { isUserLoggedIn, signInAccount } from "@/lib/appwrite/api";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-const page = () => {
-  const {toast} = useToast();
+
+
+
+const Page = () => {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false); // Loading state
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -29,11 +36,35 @@ const page = () => {
   });
 
   const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
-    const session = await signInAccount(user);
-    console.log('session:',session)
-    if (!session) {
-      toast({ title: "Login failed. Please try again." });
-      return;
+    setLoading(true); // Set loading to true
+    try {
+      const session = await signInAccount(user);
+      if (!session) {
+        toast({
+          title: "Login failed. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const isLoggedIn = await isUserLoggedIn();
+      if (isLoggedIn) {
+        form.reset();
+        router.push("/");
+      } else {
+        toast({ title: "Login failed. Please try again." });
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast({ title: error.message, variant: "destructive" });
+      } else {
+        toast({
+          title: "An unexpected error occurred.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,9 +111,17 @@ const page = () => {
 
           <Button
             type="submit"
-            className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out"
+            className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out flex items-center justify-center"
+            disabled={loading}
           >
-            Log in
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full border-2 border-t-2 border-gray-200 border-t-blue-500 h-4 w-4 mr-2"></div>
+                Logging in...
+              </>
+            ) : (
+              "Log in"
+            )}
           </Button>
 
           <p className="text-small-regular text-light-2 text-center mt-2">
@@ -100,4 +139,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

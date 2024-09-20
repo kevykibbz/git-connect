@@ -12,17 +12,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Loader from "@/components/shared/Loader";
 import { SignupValidation } from "@/lib/validation";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import {
-  useCreateUserAccount,
-  useSignInAccount,
-} from "@/lib/react-query/queries";
-import { getCurrentUser } from "@/lib/appwrite/api";
+import { createUserAccount, isUserLoggedIn, signInAccount } from "@/lib/appwrite/api";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const page = () => {
+  const router=useRouter()
+  const [loading, setLoading] = useState(false); // Loading state
   const { toast } = useToast();
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -33,12 +32,10 @@ const page = () => {
     },
   });
 
-  // Queries
-  const { mutateAsync: createUserAccount } = useCreateUserAccount();
-  const { mutateAsync: signInAccount } = useSignInAccount();
 
   // Handler
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
+    setLoading(true)
     try {
       const newUser = await createUserAccount(user);
 
@@ -50,20 +47,28 @@ const page = () => {
         return;
       }
 
-    //   const session = await signInAccount({
-    //     email: user.email,
-    //     password: user.password,
-    //   });
+      const session = await signInAccount({
+        email: user.email,
+        password: user.password,
+      });
 
-    //   if (!session) {
-    //     toast({
-    //       title: "Something went wrong. Please login your new account",
-    //       variant: "destructive",
-    //     });
+      if (!session) {
+        toast({
+          title: "Something went wrong. Please login your new account",
+          variant: "destructive",
+        });
 
-    //     // navigate("/auth/signin");
-    //     return;
-    //   }
+        router.push("/auth/signin");
+        return;
+      }
+
+      const isLoggedIn = await isUserLoggedIn();
+      if (isLoggedIn) {
+        form.reset();
+        router.push("/");
+      } else {
+        toast({ title: "Login failed. Please try again." });
+      }
 
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -74,6 +79,8 @@ const page = () => {
           variant: "destructive",
         });
       }
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -131,14 +138,20 @@ const page = () => {
               </FormItem>
             )}
           />
-
           <Button
             type="submit"
-            className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out"
+            className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out flex items-center justify-center"
+            disabled={loading}
           >
-            Sign Up
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full border-2 border-t-2 border-gray-200 border-t-blue-500 h-4 w-4 mr-2"></div>
+                Signing up...
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </Button>
-
           <p className="text-small-regular text-light-2 text-center mt-2">
             Already have an account?
             <Link

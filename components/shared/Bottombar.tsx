@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { bottombarLinks } from "@/constants";
+import { useLocation } from "react-router-dom";
 
 const Bottombar = () => {
   const { pathname } = useLocation();

@@ -12,7 +12,7 @@ export default function Home() {
       <section className="flex flex-1 h-full">
         hello world
       </section>
-      <Bottombar />
+      {/* <Bottombar /> */}
     </div>
   );
 }
