@@ -10,10 +10,13 @@ export const appwriteConfig = {
   savesCollectionId: process.env.NEXT_PUBLIC_APPWRITE_SAVES_COLLECTION_ID as string,
 };
 
+
+
 export const client = new Client();
 
 client.setEndpoint(appwriteConfig.url);
 client.setProject(appwriteConfig.projectId);
+
 
 export const account = new Account(client);
 export const databases = new Databases(client);

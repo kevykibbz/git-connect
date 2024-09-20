@@ -15,13 +15,14 @@ import { Button } from "@/components/ui/button";
 import { SignupValidation } from "@/lib/validation";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { createUserAccount, isUserLoggedIn, signInAccount } from "@/lib/appwrite/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useUserContext } from "@/context/AuthContext";
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import { useEffect } from "react";
 
 const page = () => {
   const router=useRouter()
-  const [loading, setLoading] = useState(false); // Loading state
+  const { checkAuthUser,isAuthenticated, isLoading: isUserLoading } = useUserContext();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -33,9 +34,12 @@ const page = () => {
   });
 
 
+  // Queries
+  const { mutateAsync: createUserAccount,isPending: isCreatingAccount } = useCreateUserAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
+
   // Handler
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
-    setLoading(true)
     try {
       const newUser = await createUserAccount(user);
 
@@ -62,7 +66,7 @@ const page = () => {
         return;
       }
 
-      const isLoggedIn = await isUserLoggedIn();
+      const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
         form.reset();
         router.push("/");
@@ -79,11 +83,15 @@ const page = () => {
           variant: "destructive",
         });
       }
-    }finally{
-      setLoading(false)
     }
   };
 
+  // Redirect authenticated user to homepage
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -141,9 +149,9 @@ const page = () => {
           <Button
             type="submit"
             className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out flex items-center justify-center"
-            disabled={loading}
+            disabled={isCreatingAccount || isSigningInUser || isUserLoading}
           >
-            {loading ? (
+            {isCreatingAccount || isSigningInUser || isUserLoading ? (
               <>
                 <div className="animate-spin rounded-full border-2 border-t-2 border-gray-200 border-t-blue-500 h-4 w-4 mr-2"></div>
                 Signing up...

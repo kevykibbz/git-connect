@@ -1,10 +1,9 @@
+"use client"
 import Link from "next/link"
 import { bottombarLinks } from "@/constants";
-import { useLocation } from "react-router-dom";
 
 const Bottombar = () => {
-  const { pathname } = useLocation();
-
+  const pathname=""
   return (
     <section className="bottom-bar">
       {bottombarLinks.map((link) => {

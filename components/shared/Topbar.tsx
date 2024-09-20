@@ -1,25 +1,28 @@
 "use client"
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
 import { Button } from "../ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import { useSignOutAccount } from "@/lib/react-query/queries";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 const Topbar = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { user } = useUserContext();
   const { mutate: signOut, isSuccess } = useSignOutAccount();
 
   useEffect(() => {
-    if (isSuccess) navigate(0);
-  }, [isSuccess]);
+    if (isSuccess) {
+      router.refresh(); // Refresh the page
+    }
+  }, [isSuccess, router]);
 
   return (
     <section className="topbar">
       <div className="flex-between py-4 px-5">
-        <Link to="/" className="flex gap-3 items-center">
-          <img
+        <Link href="/" className="flex gap-3 items-center">
+          <Image
             src="/assets/images/logo.svg"
             alt="logo"
             width={130}
@@ -34,11 +37,13 @@ const Topbar = () => {
             onClick={() => signOut()}>
             <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
-          <Link to={`/profile/${user.id}`} className="flex-center gap-3">
-            <img
+          <Link href={`/profile/${user.id}`} className="flex-center gap-3">
+            <Image
               src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-8 w-8 rounded-full"
+              width={130}
+            height={325}
             />
           </Link>
         </div>

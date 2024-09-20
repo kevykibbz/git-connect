@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { SigninValidation } from "@/lib/validation";
-import { isUserLoggedIn, signInAccount } from "@/lib/appwrite/api";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/AuthContext";
+import { useSignInAccount } from "@/lib/react-query/queries";
+import { useEffect } from "react";
 
 
 
@@ -26,7 +27,7 @@ import { useRouter } from "next/navigation";
 const Page = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false); // Loading state
+  const { checkAuthUser, isLoading: isUserLoading,isAuthenticated } = useUserContext();
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -35,8 +36,10 @@ const Page = () => {
     },
   });
 
+  // Queries
+  const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
+
   const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
-    setLoading(true); // Set loading to true
     try {
       const session = await signInAccount(user);
       if (!session) {
@@ -47,7 +50,10 @@ const Page = () => {
         return;
       }
 
-      const isLoggedIn = await isUserLoggedIn();
+      // Wait briefly for session propagation
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+      const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
         form.reset();
         router.push("/");
@@ -63,11 +69,16 @@ const Page = () => {
           variant: "destructive",
         });
       }
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
+
+  // Redirect authenticated user to homepage
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -112,9 +123,9 @@ const Page = () => {
           <Button
             type="submit"
             className="shad-button_primary rounded-full hover:bg-primary-600 transition duration-300 ease-in-out flex items-center justify-center"
-            disabled={loading}
+            disabled={isSigningInUser || isUserLoading}
           >
-            {loading ? (
+            {isSigningInUser || isUserLoading ? (
               <>
                 <div className="animate-spin rounded-full border-2 border-t-2 border-gray-200 border-t-blue-500 h-4 w-4 mr-2"></div>
                 Logging in...

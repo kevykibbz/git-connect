@@ -1,15 +1,17 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
+"use client"
 import { INavLink } from "@/types";
 import { sidebarLinks } from "@/constants";
 import { Loader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queries";
 import { useUserContext, INITIAL_USER } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 const LeftSidebar = () => {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const router = useRouter();
+  const pathname=""
   const { user, setUser, setIsAuthenticated, isLoading } = useUserContext();
 
   const { mutate: signOut } = useSignOutAccount();
@@ -21,14 +23,14 @@ const LeftSidebar = () => {
     signOut();
     setIsAuthenticated(false);
     setUser(INITIAL_USER);
-    navigate("/sign-in");
+    router.push("/auth/signin");
   };
 
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
-        <Link to="/" className="flex gap-3 items-center">
-          <img
+        <Link href="/" className="flex gap-3 items-center">
+          <Image
             src="/assets/images/logo.svg"
             alt="logo"
             width={170}
@@ -41,7 +43,7 @@ const LeftSidebar = () => {
             <Loader />
           </div>
         ) : (
-          <Link to={`/profile/${user.id}`} className="flex gap-3 items-center">
+          <Link href={`/profile/${user.id}`} className="flex gap-3 items-center">
             <img
               src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
               alt="profile"
@@ -64,18 +66,19 @@ const LeftSidebar = () => {
                 className={`leftsidebar-link group ${
                   isActive && "bg-primary-500"
                 }`}>
-                <NavLink
-                  to={link.route}
+                <Link
+                  href={link.route}
                   className="flex gap-4 items-center p-4">
-                  <img
+                  <Image
                     src={link.imgURL}
                     alt={link.label}
+                    width={150} height={50}
                     className={`group-hover:invert-white ${
                       isActive && "invert-white"
                     }`}
                   />
                   {link.label}
-                </NavLink>
+                </Link>
               </li>
             );
           })}
@@ -86,7 +89,7 @@ const LeftSidebar = () => {
         variant="ghost"
         className="shad-button_ghost"
         onClick={(e) => handleSignOut(e)}>
-        <img src="/assets/icons/logout.svg" alt="logout" />
+        <Image src="/assets/icons/logout.svg" alt="logout" width={150} height={50}/>
         <p className="small-medium lg:base-medium">Logout</p>
       </Button>
     </nav>

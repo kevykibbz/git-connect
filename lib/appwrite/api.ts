@@ -121,24 +121,22 @@ export async function getAccount() {
   }
 }
 
-// Function to check if the user is logged in
 export async function isUserLoggedIn() {
   try {
     const session = await account.getSession('current');
-    return !!session; // Returns true if session exists, false otherwise
+    return !!session; 
   } catch (error) {
-    // If an error occurs (e.g., session does not exist), return false
     console.error('Error checking session:', error);
     return false;
   }
 }
 
+
 // ============================== GET USER
 export async function getCurrentUser() {
   try {
     const currentAccount = await getAccount();
-
-    if (!currentAccount) throw Error;
+    if (!currentAccount) throw new Error("No current account");
 
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -146,11 +144,13 @@ export async function getCurrentUser() {
       [Query.equal("accountId", currentAccount.$id)]
     );
 
-    if (!currentUser) throw Error;
+    if (!currentUser || currentUser.documents.length === 0) {
+      throw new Error("No current user found in database");
+    }
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching current user:", error);
     return null;
   }
 }
