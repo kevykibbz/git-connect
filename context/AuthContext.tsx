@@ -1,3 +1,4 @@
+"use client"
 import { createContext, useContext, useEffect, useState } from "react";
 import { IUser } from "@/types";
 import { getCurrentUser } from "@/lib/appwrite/api";
@@ -29,6 +30,7 @@ type IContextType = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
 };
+
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
@@ -66,14 +68,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    const cookieFallback = localStorage.getItem("cookieFallback");
-    if (
-      cookieFallback === "[]" ||
-      cookieFallback === null ||
-      cookieFallback === undefined
-    ) {
-      router.push("/auth/signin");
-    }
+    // const cookieFallback = localStorage.getItem("cookieFallback");
+    // if (
+    //   cookieFallback === "[]" ||
+    //   cookieFallback === null ||
+    //   cookieFallback === undefined
+    // ) {
+    //   router.push("/auth/signin");
+    // }
 
     checkAuthUser();
   }, []);

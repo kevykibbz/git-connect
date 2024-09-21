@@ -14,7 +14,7 @@ const Topbar = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.refresh(); // Refresh the page
+      router.push("/auth/signin"); // Refresh the page
     }
   }, [isSuccess, router]);
 

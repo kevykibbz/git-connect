@@ -1,9 +1,9 @@
 "use client"
 import Link from "next/link"
 import { bottombarLinks } from "@/constants";
-
+import {usePathname} from "next/navigation"
 const Bottombar = () => {
-  const pathname=""
+  const pathname = usePathname();
   return (
     <section className="bottom-bar">
       {bottombarLinks.map((link) => {

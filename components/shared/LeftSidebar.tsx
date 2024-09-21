@@ -1,17 +1,17 @@
-"use client"
+"use client";
 import { INavLink } from "@/types";
 import { sidebarLinks } from "@/constants";
 import { Loader } from "@/components/shared";
 import { Button } from "@/components/ui/button";
 import { useSignOutAccount } from "@/lib/react-query/queries";
 import { useUserContext, INITIAL_USER } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
 const LeftSidebar = () => {
   const router = useRouter();
-  const pathname=""
+  const pathname = usePathname();
   const { user, setUser, setIsAuthenticated, isLoading } = useUserContext();
 
   const { mutate: signOut } = useSignOutAccount();
@@ -30,12 +30,7 @@ const LeftSidebar = () => {
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
         <Link href="/" className="flex gap-3 items-center">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="logo"
-            width={170}
-            height={36}
-          />
+          <h2>GitConnect</h2>
         </Link>
 
         {isLoading || !user.email ? (
@@ -43,8 +38,13 @@ const LeftSidebar = () => {
             <Loader />
           </div>
         ) : (
-          <Link href={`/profile/${user.id}`} className="flex gap-3 items-center">
-            <img
+          <Link
+            href={`/profile/${user.id}`}
+            className="flex gap-3 items-center"
+          >
+            <Image
+              width={14}
+              height={14}
               src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
               alt="profile"
               className="h-14 w-14 rounded-full"
@@ -65,14 +65,14 @@ const LeftSidebar = () => {
                 key={link.label}
                 className={`leftsidebar-link group ${
                   isActive && "bg-primary-500"
-                }`}>
-                <Link
-                  href={link.route}
-                  className="flex gap-4 items-center p-4">
+                }`}
+              >
+                <Link href={link.route} className="flex gap-4 items-center p-4">
                   <Image
                     src={link.imgURL}
                     alt={link.label}
-                    width={150} height={50}
+                    width={24}
+                    height={24}
                     className={`group-hover:invert-white ${
                       isActive && "invert-white"
                     }`}
@@ -87,9 +87,15 @@ const LeftSidebar = () => {
 
       <Button
         variant="ghost"
-        className="shad-button_ghost"
-        onClick={(e) => handleSignOut(e)}>
-        <Image src="/assets/icons/logout.svg" alt="logout" width={150} height={50}/>
+        className="mt-4 shad-button_ghost"
+        onClick={(e) => handleSignOut(e)}
+      >
+        <Image
+          src="/assets/icons/logout.svg"
+          alt="logout"
+          width={24}
+          height={24}
+        />
         <p className="small-medium lg:base-medium">Logout</p>
       </Button>
     </nav>

@@ -1,3 +1,4 @@
+"use client"
 import { Models } from "appwrite";
 import { Link } from "react-router-dom";
 
