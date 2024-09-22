@@ -70,8 +70,12 @@ const Page = () => {
               <StatBlock value={20} label="Following" />
             </div>
 
-            <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
-              {currentUser.bio}
+            <p className="capitalize small-medium md:base-medium text-center xl:text-left mt-5 max-w-screen-sm">
+              Education:{currentUser.education}
+            </p>
+            <hr className="border-t border-gray-300 mt-2" />
+            <p className="small-medium md:base-medium text-center xl:text-left mt-5 max-w-screen-sm line-clamp-5">
+              Work Experience:{currentUser.work_experience}
             </p>
           </div>
 

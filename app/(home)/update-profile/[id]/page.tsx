@@ -33,7 +33,8 @@ const Page = () => {
       name: user.name,
       username: user.username,
       email: user.email,
-      bio: user.bio || "",
+      education: user.education || "",
+      work_experience: user.work_experience || "",
     },
   });
 
@@ -42,6 +43,7 @@ const Page = () => {
   const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
     useUpdateUser();
 
+    console.log('currentUser:',currentUser)
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">
@@ -54,7 +56,8 @@ const Page = () => {
     const updatedUser = await updateUser({
       userId: currentUser.$id,
       name: value.name,
-      bio: value.bio,
+      work_experience: value.work_experience,
+      education: value.education,
       file: value.file,
       imageUrl: currentUser.imageUrl,
       imageId: currentUser.imageId,
@@ -69,11 +72,12 @@ const Page = () => {
     toast({
       title: `Profile updated successfully.`,
     });
-    
+
     setUser({
       ...user,
       name: updatedUser?.name,
-      bio: updatedUser?.bio,
+      education: updatedUser?.education,
+      work_experience: updatedUser?.work_experience,
       imageUrl: updatedUser?.imageUrl,
     });
     return router.push(`/profile/${id}`);
@@ -168,10 +172,29 @@ const Page = () => {
 
             <FormField
               control={form.control}
-              name="bio"
+              name="education"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="shad-form_label">Bio</FormLabel>
+                  <FormLabel className="shad-form_label">Education</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="shad-textarea custom-scrollbar"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="shad-form_message" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="work_experience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="shad-form_label">
+                    Work Experience
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       className="shad-textarea custom-scrollbar"

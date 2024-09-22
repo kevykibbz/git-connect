@@ -19,13 +19,13 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "GitConnect | Social Network for Developers",
-  description:"GitConnect allows developers to create a profile/portfolio, share posts, and get help from others. Features include developer profiles, posts, likes/dislikes, and discussions.",
+  description: "GitConnect allows developers to create a profile/portfolio, share posts, and get help from others. Features include developer profiles, posts, likes/dislikes, and discussions.",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://git-connect-6bro.vercel.app/",
     title: "GitConnect | Social Network for Developers",
-    description:"GitConnect allows developers to create a profile/portfolio, share posts, and get help from others. Features include developer profiles, posts, likes/dislikes, and discussions.",
+    description: "GitConnect allows developers to create a profile/portfolio, share posts, and get help from others. Features include developer profiles, posts, likes/dislikes, and discussions.",
     siteName: "GitConnect",
     images: [
       {
@@ -40,9 +40,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@GitConnectDev",
     title: "GitConnect | Social Network for Developers",
-    description:"Join GitConnect today to create your profile, share your posts, and engage with the developer community.",
+    description: "Join GitConnect today to create your profile, share your posts, and engage with the developer community.",
   },
-  themeColor: "#4a4aec",
 };
 
 export default function RootLayout({
@@ -53,6 +52,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#4a4aec" />
         <meta name="copyright" content="GitConnect" />
         <meta name="keywords" content="GitConnect, Web Developer, Frontend Developer, Backend Developer, Full Stack Developer, Software Engineer, JavaScript, React.js, Node.js, HTML, CSS, SEO, Portfolio"/>
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -66,9 +66,7 @@ export default function RootLayout({
         <meta property="og:description" content="Join GitConnect today to create your profile, share your posts, and engage with the developer community."/>
         <link rel="canonical" href="https://git-connect-6bro.vercel.app/"/>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <main className="flex h-screen">
           <QueryProvider>
             <AuthProvider>
