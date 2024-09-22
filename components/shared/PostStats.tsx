@@ -32,8 +32,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   const { data: currentUser } = useGetCurrentUser();
 
-  const savedPostRecord = currentUser?.save?.length
-  ? currentUser.save.find(
+  const savedPostRecord = currentUser?.saves?.length
+  ? currentUser.saves.find(
       (record: Models.Document) => record.post.$id === post.$id
     )
   : null;

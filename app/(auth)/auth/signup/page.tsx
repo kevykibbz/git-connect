@@ -17,12 +17,19 @@ import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthContext";
-import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queries";
+import {
+  useCreateUserAccount,
+  useSignInAccount,
+} from "@/lib/react-query/queries";
 import { useEffect } from "react";
 
 const page = () => {
-  const router=useRouter()
-  const { checkAuthUser,isAuthenticated, isLoading: isUserLoading } = useUserContext();
+  const router = useRouter();
+  const {
+    checkAuthUser,
+    isAuthenticated,
+    isLoading: isUserLoading,
+  } = useUserContext();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -33,10 +40,11 @@ const page = () => {
     },
   });
 
-
   // Queries
-  const { mutateAsync: createUserAccount,isPending: isCreatingAccount } = useCreateUserAccount();
-  const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
+    useCreateUserAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningInUser } =
+    useSignInAccount();
 
   // Handler
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
@@ -73,7 +81,6 @@ const page = () => {
       } else {
         toast({ title: "Login failed. Please try again." });
       }
-
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast({ title: error.message, variant: "destructive" });
@@ -95,6 +102,7 @@ const page = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
+        <img src="/assets/icons/logo.svg" alt="logo" className="w-full h-auto object-cover"   />
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new account
         </h2>

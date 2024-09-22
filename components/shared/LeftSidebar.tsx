@@ -30,8 +30,13 @@ const LeftSidebar = () => {
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
-        <Link href="/" className="flex gap-3 items-center">
-          <h2>GitConnect</h2>
+      <Link href="/" className="flex gap-3 items-center">
+          <Image
+            src="/assets/icons/logo.svg"
+            alt="logo"
+            width={200}
+            height={36}
+          />
         </Link>
 
         {isAuthenticated ? (

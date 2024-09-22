@@ -21,13 +21,14 @@ import { useUserContext } from "@/context/AuthContext";
 import { useSignInAccount } from "@/lib/react-query/queries";
 import { useEffect } from "react";
 
-
-
-
 const Page = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading,isAuthenticated } = useUserContext();
+  const {
+    checkAuthUser,
+    isLoading: isUserLoading,
+    isAuthenticated,
+  } = useUserContext();
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -37,7 +38,8 @@ const Page = () => {
   });
 
   // Queries
-  const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending: isSigningInUser } =
+    useSignInAccount();
 
   const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
     try {
@@ -51,7 +53,7 @@ const Page = () => {
       }
 
       // Wait briefly for session propagation
-    await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
       const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
@@ -69,9 +71,8 @@ const Page = () => {
           variant: "destructive",
         });
       }
-    } 
+    }
   };
-
 
   // Redirect authenticated user to homepage
   useEffect(() => {
@@ -82,7 +83,8 @@ const Page = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
+        <img src="/assets/icons/logo.svg" alt="logo" className="w-full h-auto object-cover" />
+        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12" >
           Log in to your account
         </h2>
         <p className="text-light-3 small-medium md:base-regular mt-2">
