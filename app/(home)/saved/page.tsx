@@ -25,7 +25,7 @@ const Page = () => {
     if (!currentUser) {
       toast({ title: "You must be logged in to view saved posts." });
     }
-  }, [currentUser]);
+  }, [currentUser,toast]);
   return (
     <div className="saved-container">
       <div className="flex gap-2 w-full max-w-5xl">

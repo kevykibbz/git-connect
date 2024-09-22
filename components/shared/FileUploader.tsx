@@ -12,6 +12,7 @@ type FileUploaderProps = {
 };
 
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
@@ -21,7 +22,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
       fieldChange(acceptedFiles);
       setFileUrl(convertFileToUrl(acceptedFiles[0]));
     },
-    [file,fieldChange]
+    [fieldChange]
   );
 
   const { getRootProps, getInputProps } = useDropzone({

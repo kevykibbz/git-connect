@@ -98,7 +98,7 @@ const Page = () => {
               <Button
                 type="button"
                 className="shad-button_primary px-8 rounded-full"
-                onClick={(e) => followDeveloper()}
+                onClick={() => followDeveloper()}
               >
                 Follow
               </Button>

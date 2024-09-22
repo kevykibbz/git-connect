@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui";
 import { Loader } from "@/components/shared";
 import { GridPostList, PostStats } from "@/components/shared";
@@ -40,7 +40,8 @@ const Page = () => {
         <Button
           onClick={() => router.back()}
           variant="ghost"
-          className="shad-button_ghost">
+          className="shad-button_ghost"
+        >
           <Image
             src={"/assets/icons/back.svg"}
             alt="back"
@@ -55,18 +56,23 @@ const Page = () => {
         <Loader />
       ) : (
         <div className="post_details-card">
-          <img
+          <Image
             src={post?.imageUrl}
             alt="creator"
             className="post_details-img"
+            width={417}
+            height={320}
           />
 
           <div className="post_details-info">
             <div className="flex-between w-full">
               <Link
                 href={`/profile/${post?.creator.$id}`}
-                className="flex items-center gap-3">
-                <img
+                className="flex items-center gap-3"
+              >
+                <Image
+                  width={32}
+                  height={32}
                   src={
                     post?.creator.imageUrl ||
                     "/assets/icons/profile-placeholder.svg"
@@ -93,7 +99,8 @@ const Page = () => {
               <div className="flex-center gap-4">
                 <Link
                   href={`/update-post/${post?.$id}`}
-                  className={`${user.id !== post?.creator.$id && "hidden"}`}>
+                  className={`${user.id !== post?.creator.$id && "hidden"}`}
+                >
                   <Image
                     src={"/assets/icons/edit.svg"}
                     alt="edit"
@@ -107,7 +114,8 @@ const Page = () => {
                   variant="ghost"
                   className={`ost_details-delete_btn ${
                     user.id !== post?.creator.$id && "hidden"
-                  }`}>
+                  }`}
+                >
                   <Image
                     src={"/assets/icons/delete.svg"}
                     alt="delete"
@@ -126,7 +134,8 @@ const Page = () => {
                 {post?.tags.map((tag: string, index: string) => (
                   <li
                     key={`${tag}${index}`}
-                    className="text-light-3 small-regular">
+                    className="text-light-3 small-regular"
+                  >
                     #{tag}
                   </li>
                 ))}

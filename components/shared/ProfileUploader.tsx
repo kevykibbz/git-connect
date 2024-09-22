@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 
 import { convertFileToUrl } from "@/lib/utils";
+import Image from "next/image";
 
 type ProfileUploaderProps = {
   fieldChange: (files: File[]) => void;
@@ -11,6 +12,7 @@ type ProfileUploaderProps = {
 };
 
 const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
@@ -20,7 +22,7 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
       fieldChange(acceptedFiles);
       setFileUrl(convertFileToUrl(acceptedFiles[0]));
     },
-    [file,fieldChange]
+    [fieldChange]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -35,9 +37,11 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
       <input {...getInputProps()} className="cursor-pointer" />
 
       <div className="cursor-pointer flex-center gap-4">
-        <img
+        <Image
           src={fileUrl || "/assets/icons/profile-placeholder.svg"}
           alt="image"
+          height={24}
+          width={24}
           className="h-24 w-24 rounded-full object-cover object-top"
         />
         <p className="text-primary-500 small-regular md:bbase-semibold">

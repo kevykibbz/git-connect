@@ -1,16 +1,16 @@
 "use client"
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-
 import { Input } from "@/components/ui";
 import useDebounce from "@/hooks/useDebounce";
 import { GridPostList, Loader } from "@/components/shared";
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queries";
 import Image from "next/image";
+import { Models } from "appwrite";
 
 export type SearchResultProps = {
   isSearchFetching: boolean;
-  searchedPosts: any;
+  searchedPosts: Models.Document;
 };
 
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
@@ -37,7 +37,7 @@ const Page = () => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
-  }, [inView, searchValue]);
+  }, [inView, searchValue,fetchNextPage]);
 
   if (!posts)
     return (
@@ -55,7 +55,7 @@ const Page = () => {
       <div className="explore-inner_container">
         <h2 className="h3-bold md:h2-bold w-full">Search Posts</h2>
         <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
-          <img
+          <Image
             src="/assets/icons/search.svg"
             width={24}
             height={24}
