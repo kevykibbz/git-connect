@@ -3,10 +3,12 @@ import { Models } from "appwrite";
 import { GridPostList, Loader } from "@/components/shared";
 import { useGetCurrentUser } from "@/lib/react-query/queries";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const page = () => {
   const { data: currentUser } = useGetCurrentUser();
-
+  const {toast}=useToast()
   const savePosts = currentUser?.saves
   ? currentUser.saves
       .map((savePost: Models.Document) => ({
@@ -18,6 +20,12 @@ const page = () => {
       .reverse()
   : [];
 
+  // Show toast if user is not authenticated
+  useEffect(() => {
+    if (!currentUser) {
+      toast({ title: "You must be logged in to view saved posts." });
+    }
+  }, [currentUser]);
   return (
     <div className="saved-container">
       <div className="flex gap-2 w-full max-w-5xl">

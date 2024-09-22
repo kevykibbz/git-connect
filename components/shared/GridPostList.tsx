@@ -18,9 +18,12 @@ const GridPostList = ({
 }: GridPostListProps) => {
   const { user } = useUserContext();
 
+  // Filter posts to only include those with an imageUrl
+  const filteredPosts = posts.filter(post => post.imageUrl);
+
   return (
     <ul className="grid-container">
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
           <Link href={`/posts/${post.$id}`} className="grid-post_link">
             <img
@@ -34,8 +37,8 @@ const GridPostList = ({
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1">
                 <Image
-                  width={8}
-                  height={8}
+                  width={32} // Adjust size if necessary
+                  height={32}
                   src={
                     post.creator.imageUrl ||
                     "/assets/icons/profile-placeholder.svg"

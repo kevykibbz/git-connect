@@ -30,7 +30,7 @@ const LeftSidebar = () => {
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
-      <Link href="/" className="flex gap-3 items-center">
+        <Link href="/" className="flex gap-3 items-center">
           <Image
             src="/assets/icons/logo.svg"
             alt="logo"
@@ -82,6 +82,7 @@ const LeftSidebar = () => {
           {sidebarLinks.map((link: INavLink) => {
             const isActive = pathname === link.route;
             const isCreatePost = link.route === "/create-post";
+            const isSaved = link.route === "/saved";
 
             return (
               <li
@@ -93,13 +94,16 @@ const LeftSidebar = () => {
                 <Link
                   href={isAuthenticated || !isCreatePost ? link.route : "#"}
                   className={`flex gap-4 items-center p-4 rounded-full transition-all duration-300
-                    ${isActive ? "bg-primary-500 text-white" : ""}
-                    ${
-                      !isAuthenticated && isCreatePost
-                        ? "pointer-events-none opacity-50 cursor-not-allowed"
-                        : ""
-                    }
-                    group-hover:bg-primary-500 group-hover:text-white`}
+            ${isActive ? "bg-primary-500 text-white" : ""}
+            ${
+              !isAuthenticated && isCreatePost
+                ? "pointer-events-none opacity-50 cursor-not-allowed"
+                : ""
+            }
+            ${
+              !isAuthenticated && isSaved ? "pointer-events-none opacity-50 cursor-not-allowed" : ""
+            }
+            group-hover:bg-primary-500 group-hover:text-white`}
                 >
                   <Image
                     src={link.imgURL}
