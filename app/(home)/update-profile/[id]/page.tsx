@@ -69,6 +69,7 @@ const Page = () => {
     toast({
       title: `Profile updated successfully.`,
     });
+    
     setUser({
       ...user,
       name: updatedUser?.name,

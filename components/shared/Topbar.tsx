@@ -14,7 +14,7 @@ const Topbar = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push("/auth/signin"); // Refresh the page
+      router.push("/auth/signin"); 
     }
   }, [isSuccess, router]);
 
@@ -23,7 +23,7 @@ const Topbar = () => {
       <div className="flex-between py-4 px-5">
         <Link href="/" className="flex gap-3 items-center">
           <Image
-            src="/assets/images/logo.svg"
+            src="/assets/icons/logo.svg"
             alt="logo"
             width={130}
             height={325}

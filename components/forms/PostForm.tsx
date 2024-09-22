@@ -71,7 +71,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       }
 
       toast({
-        title: `${action} post succeeded.`,
+        title: `Post updated successfully`,
       });
       
       return router.push(`/posts/${post.$id}`);
@@ -88,6 +88,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
         title: `${action} post failed. Please try again.`,
       });
     }
+
+    toast({
+      title: `Post created successfully`,
+    });
     router.push("/");
   };
 
