@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
+
 import { Input } from "@/components/ui";
 import useDebounce from "@/hooks/useDebounce";
 import { GridPostList, Loader } from "@/components/shared";
@@ -10,7 +11,7 @@ import { Models } from "appwrite";
 
 export type SearchResultProps = {
   isSearchFetching: boolean;
-  searchedPosts: Models.Document;
+  searchedPosts?: { documents: Models.Document[] };
 };
 
 const SearchResults = ({ isSearchFetching, searchedPosts }: SearchResultProps) => {
@@ -98,7 +99,7 @@ const Page = () => {
           <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
           posts.pages.map((item, index) => (
-            <GridPostList key={`page-${index}`} posts={item.documents} />
+            <GridPostList key={`page-${index}`} posts={Array.isArray(item.documents) ? item.documents : [item.documents]} />
           ))
         )}
       </div>
