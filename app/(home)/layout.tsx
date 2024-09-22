@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "GitConnect | Social Network for Developers",
     description:"Join GitConnect today to create your profile, share your posts, and engage with the developer community.",
   },
-  themeColor: "#38bdf8",
+  themeColor: "#4a4aec",
 };
 
 export default function RootLayout({
@@ -54,9 +54,17 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="copyright" content="GitConnect" />
+        <meta name="keywords" content="GitConnect, Web Developer, Frontend Developer, Backend Developer, Full Stack Developer, Software Engineer, JavaScript, React.js, Node.js, HTML, CSS, SEO, Portfolio"/>
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
         <meta httpEquiv="Expires" content="0" />
+        <meta property="og:site_name" content="GitConnect | Social Network for Developers"/>
+        <meta property="og:url" content="https://git-connect-6bro.vercel.app/"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="GitConnect | Social Network for Developers"/>
+        <meta property="og:locale" content="en_US"/>
+        <meta property="og:description" content="Join GitConnect today to create your profile, share your posts, and engage with the developer community."/>
+        <link rel="canonical" href="https://git-connect-6bro.vercel.app/"/>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
