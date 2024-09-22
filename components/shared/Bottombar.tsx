@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { bottombarLinks } from "@/constants";
 import {usePathname} from "next/navigation"
+import Image from "next/image";
 const Bottombar = () => {
   const pathname = usePathname();
   return (
@@ -15,7 +16,7 @@ const Bottombar = () => {
             className={`${
               isActive && "rounded-[10px] bg-primary-500 "
             } flex-center flex-col gap-1 p-2 transition`}>
-            <img
+            <Image
               src={link.imgURL}
               alt={link.label}
               width={16}

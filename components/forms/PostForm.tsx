@@ -95,7 +95,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col gap-9 w-full  max-w-5xl"
+        className="flex flex-col gap-9 w-full max-w-5xl"
       >
         <FormField
           control={form.control}
@@ -151,7 +151,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">
-                Add Tags (separated by comma " , ")
+                Add Tags (separated by comma &quot;, &quot;)
               </FormLabel>
               <FormControl>
                 <Input

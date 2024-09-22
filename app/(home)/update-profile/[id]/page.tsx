@@ -21,7 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const { toast } = useToast();
   const router = useRouter();
   const id: string = usePathname().split("/").pop() ?? "";
@@ -206,4 +206,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

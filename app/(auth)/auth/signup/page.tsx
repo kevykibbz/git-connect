@@ -22,8 +22,9 @@ import {
   useSignInAccount,
 } from "@/lib/react-query/queries";
 import { useEffect } from "react";
+import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const {
     checkAuthUser,
@@ -102,7 +103,13 @@ const page = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/icons/logo.svg" alt="logo" className="w-full h-auto object-cover"   />
+        <Image
+          src="/assets/icons/logo.svg"
+          alt="logo"
+          width={420}
+          height={88.41}
+          className="w-full h-auto object-cover"
+        />
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new account
         </h2>
@@ -183,4 +190,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

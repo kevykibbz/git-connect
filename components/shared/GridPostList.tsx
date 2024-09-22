@@ -26,9 +26,11 @@ const GridPostList = ({
       {filteredPosts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
           <Link href={`/posts/${post.$id}`} className="grid-post_link">
-            <img
+            <Image
               src={post.imageUrl}
               alt="post"
+              width={320.67}
+              height={318}
               className="h-full w-full object-cover"
             />
           </Link>

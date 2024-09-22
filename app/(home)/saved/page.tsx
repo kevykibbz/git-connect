@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-const page = () => {
+const Page = () => {
   const { data: currentUser } = useGetCurrentUser();
   const {toast}=useToast()
   const savePosts = currentUser?.saves
@@ -54,4 +54,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -1,4 +1,4 @@
-import { ID, Query } from "appwrite";
+import { ID, ImageGravity, Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import {
@@ -123,14 +123,13 @@ export async function getAccount() {
 
 export async function isUserLoggedIn() {
   try {
-    const session = await account.getSession('current');
-    return !!session; 
+    const session = await account.getSession("current");
+    return !!session;
   } catch (error) {
-    console.error('Error checking session:', error);
+    console.error("Error checking session:", error);
     return false;
   }
 }
-
 
 // ============================== GET USER
 export async function getCurrentUser() {
@@ -193,7 +192,7 @@ export async function createPost(post: INewPost) {
     }
 
     // Create the post object dynamically
-    const newPostData: Record<string, any> = {
+    const newPostData: Record<string, string | string[] | undefined> = {
       creator: post.userId,
       caption: post.caption,
       tags: post.tags?.replace(/ /g, "").split(",") || [],
@@ -225,7 +224,6 @@ export async function createPost(post: INewPost) {
   }
 }
 
-
 // ============================== UPLOAD FILE
 export async function uploadFile(file: File) {
   try {
@@ -249,7 +247,7 @@ export function getFilePreview(fileId: string) {
       fileId,
       2000,
       2000,
-      "top",
+      ImageGravity.Top,
       100
     );
 
@@ -290,7 +288,10 @@ export async function searchPosts(searchTerm: string) {
 }
 
 export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
-  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
+  const queries: (
+    | ReturnType<typeof Query.orderDesc>
+    | ReturnType<typeof Query.limit>
+  )[] = [Query.orderDesc("$updatedAt"), Query.limit(9)];
 
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
@@ -514,7 +515,9 @@ export async function getRecentPosts() {
 
 // ============================== GET USERS
 export async function getUsers(limit?: number) {
-  const queries: any[] = [Query.orderDesc("$createdAt")];
+  const queries: ReturnType<typeof Query.orderDesc>[] = [
+    Query.orderDesc("$createdAt"),
+  ];
 
   if (limit) {
     queries.push(Query.limit(limit));

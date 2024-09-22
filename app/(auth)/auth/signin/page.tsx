@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { useUserContext } from "@/context/AuthContext";
 import { useSignInAccount } from "@/lib/react-query/queries";
 import { useEffect } from "react";
+import Image from "next/image";
 
 const Page = () => {
   const router = useRouter();
@@ -83,8 +84,14 @@ const Page = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/icons/logo.svg" alt="logo" className="w-full h-auto object-cover" />
-        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12" >
+        <Image
+          src="/assets/icons/logo.svg"
+          alt="logo"
+          width={420}
+          height={88.41}
+          className="w-full h-auto object-cover"
+        />
+        <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Log in to your account
         </h2>
         <p className="text-light-3 small-medium md:base-regular mt-2">

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetCurrentUser, useGetUserById } from "@/lib/react-query/queries";
 import { GridPostList, Loader } from "@/components/shared";
-import LikedPosts from "@/components/shared/LikedPosts";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,7 +20,7 @@ const StatBlock = ({ value, label }: StabBlockProps) => (
   </div>
 );
 
-const Profile = () => {
+const Page = () => {
   const pathname = usePathname();
   const id: string = pathname.split("/").pop() ?? "";
   const { user } = useUserContext();
@@ -142,19 +141,8 @@ const Profile = () => {
       )}
 
       <GridPostList posts={currentUser.posts} showUser={false} />
-
-      {/* <Routes>
-        <Route
-          index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
-        />
-        {currentUser.$id === user.id && (
-          <Route path="/liked-posts" element={<LikedPosts />} />
-        )}
-      </Routes>
-      <Outlet /> */}
     </div>
   );
 };
 
-export default Profile;
+export default Page;

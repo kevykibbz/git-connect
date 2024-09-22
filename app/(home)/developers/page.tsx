@@ -4,7 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useGetUsers } from "@/lib/react-query/queries";
 import { useEffect } from "react";
 
-const page = () => {
+const Page = () => {
   const { toast } = useToast();
 
   const { data: creators, isLoading, isError: isErrorCreators } = useGetUsers();
@@ -35,4 +35,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

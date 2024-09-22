@@ -5,7 +5,7 @@ import { useGetPostById } from "@/lib/react-query/queries";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
     const pathname = usePathname();
     const id: string = pathname.split("/").pop() ?? "";  
     const { data: post, isLoading } = useGetPostById(id);
@@ -37,4 +37,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

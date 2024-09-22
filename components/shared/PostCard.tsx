@@ -77,10 +77,12 @@ const PostCard = ({ post }: PostCardProps) => {
         </div>
 
         {post.imageUrl && (
-          <img
+          <Image
             src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
             alt="post image"
             className="post-card_img"
+            width={582}
+            height={450}
           />
         )}
       </Link>
