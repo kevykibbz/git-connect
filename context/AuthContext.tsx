@@ -1,7 +1,7 @@
 "use client"
 import { createContext, useContext, useEffect, useState } from "react";
 import { IUser } from "@/types";
-import { getCurrentUser } from "@/lib/appwrite/api";
+import { getCurrentUser } from "@/lib/appwrite/api"; // Ensure this function properly handles unauthenticated users
 import { useRouter } from "next/navigation";
 
 export const INITIAL_USER = {
@@ -31,7 +31,6 @@ type IContextType = {
   checkAuthUser: () => Promise<boolean>;
 };
 
-
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -44,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const currentAccount = await getCurrentUser();
+
       if (currentAccount) {
         setUser({
           id: currentAccount.$id,
@@ -54,13 +54,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           bio: currentAccount.bio,
         });
         setIsAuthenticated(true);
-
         return true;
       }
 
+      // If no user is logged in
+      setIsAuthenticated(false);
+      setUser(INITIAL_USER); // Reset user to initial state
       return false;
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching current user:", error);
+      setIsAuthenticated(false);
+      setUser(INITIAL_USER); // Reset user to initial state on error
       return false;
     } finally {
       setIsLoading(false);
@@ -68,15 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // const cookieFallback = localStorage.getItem("cookieFallback");
-    // if (
-    //   cookieFallback === "[]" ||
-    //   cookieFallback === null ||
-    //   cookieFallback === undefined
-    // ) {
-    //   router.push("/auth/signin");
-    // }
-
+    // Trigger authentication check on component mount
     checkAuthUser();
   }, []);
 

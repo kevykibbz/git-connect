@@ -1,9 +1,10 @@
 "use client"
 
 import { Models } from "appwrite";
-import { Link } from "react-router-dom";
 
 import { Button } from "../ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 type UserCardProps = {
   user: Models.Document;
@@ -11,10 +12,12 @@ type UserCardProps = {
 
 const UserCard = ({ user }: UserCardProps) => {
   return (
-    <Link to={`/profile/${user.$id}`} className="user-card">
-      <img
+    <Link href={`/profile/${user.$id}`} className="user-card">
+      <Image
         src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
         alt="creator"
+        width={14}
+        height={14}
         className="rounded-full w-14 h-14"
       />
 
@@ -27,7 +30,7 @@ const UserCard = ({ user }: UserCardProps) => {
         </p>
       </div>
 
-      <Button type="button" size="sm" className="shad-button_primary px-5">
+      <Button type="button" size="sm" className="shad-button_primary px-5 rounded-full">
         Follow
       </Button>
     </Link>

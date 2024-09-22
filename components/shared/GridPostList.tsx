@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import { Models } from "appwrite";
-import { Link } from "react-router-dom";
-
 import { PostStats } from "@/components/shared";
 import { useUserContext } from "@/context/AuthContext";
+import Link from "next/link";
+import Image from "next/image";
 
 type GridPostListProps = {
   posts: Models.Document[];
@@ -22,7 +22,7 @@ const GridPostList = ({
     <ul className="grid-container">
       {posts.map((post) => (
         <li key={post.$id} className="relative min-w-80 h-80">
-          <Link to={`/posts/${post.$id}`} className="grid-post_link">
+          <Link href={`/posts/${post.$id}`} className="grid-post_link">
             <img
               src={post.imageUrl}
               alt="post"
@@ -33,7 +33,9 @@ const GridPostList = ({
           <div className="grid-post_user">
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1">
-                <img
+                <Image
+                  width={8}
+                  height={8}
                   src={
                     post.creator.imageUrl ||
                     "/assets/icons/profile-placeholder.svg"

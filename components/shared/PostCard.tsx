@@ -1,27 +1,26 @@
-"use client"
-
-import { Models } from "appwrite";
-import { Link } from "react-router-dom";
-
-import { PostStats } from "@/components/shared";
-import { multiFormatDateString } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
-
+import { Models } from "appwrite";
+import Link from "next/link";
+import Image from "next/image";
+import { multiFormatDateString } from "@/lib/utils";
+import PostStats from "./PostStats";
 type PostCardProps = {
   post: Models.Document;
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { user } = useUserContext();
+  const { user, isAuthenticated } = useUserContext(); // Get user and auth status from context
 
-  if (!post.creator) return;
+  if (!post.creator) return null;
 
   return (
     <div className="post-card">
       <div className="flex-between">
         <div className="flex items-center gap-3">
-          <Link to={`/profile/${post.creator.$id}`}>
-            <img
+          <Link href={`/profile/${post.creator.$id}`}>
+            <Image
+              width={12}
+              height={12}
               src={
                 post.creator?.imageUrl ||
                 "/assets/icons/profile-placeholder.svg"
@@ -36,7 +35,7 @@ const PostCard = ({ post }: PostCardProps) => {
               {post.creator.name}
             </p>
             <div className="flex-center gap-2 text-light-3">
-              <p className="subtle-semibold lg:small-regular ">
+              <p className="subtle-semibold lg:small-regular">
                 {multiFormatDateString(post.$createdAt)}
               </p>
               •
@@ -47,19 +46,20 @@ const PostCard = ({ post }: PostCardProps) => {
           </div>
         </div>
 
-        <Link
-          to={`/update-post/${post.$id}`}
-          className={`${user.id !== post.creator.$id && "hidden"}`}>
-          <img
-            src={"/assets/icons/edit.svg"}
-            alt="edit"
-            width={20}
-            height={20}
-          />
-        </Link>
+        {/* Only show edit button if the user is logged in and is the post creator */}
+        {isAuthenticated && user.id === post.creator.$id && (
+          <Link href={`/update-post/${post.$id}`}>
+            <Image
+              src={"/assets/icons/edit.svg"}
+              alt="edit"
+              width={20}
+              height={20}
+            />
+          </Link>
+        )}
       </div>
 
-      <Link to={`/posts/${post.$id}`}>
+      <Link href={`/posts/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
           <ul className="flex gap-1 mt-2">
@@ -78,7 +78,7 @@ const PostCard = ({ post }: PostCardProps) => {
         />
       </Link>
 
-      <PostStats post={post} userId={user.id} />
+      <PostStats post={post} userId={user?.id || ""} />
     </div>
   );
 };

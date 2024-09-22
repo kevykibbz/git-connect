@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui";
 import { convertFileToUrl } from "@/lib/utils";
+import Image from "next/image";
 
 type FileUploaderProps = {
   fieldChange: (files: File[]) => void;
@@ -45,7 +46,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
         </>
       ) : (
         <div className="file_uploader-box ">
-          <img
+          <Image
             src="/assets/icons/file-upload.svg"
             width={96}
             height={77}
@@ -57,7 +58,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
           </h3>
           <p className="text-light-4 small-regular mb-6">SVG, PNG, JPG</p>
 
-          <Button type="button" className="shad-button_dark_4">
+          <Button type="button" className="shad-button_dark_4 rounded-full">
             Select from computer
           </Button>
         </div>

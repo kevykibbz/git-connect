@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import * as z from "zod";
 import { Models } from "appwrite";
 import { useForm } from "react-hook-form";
@@ -18,7 +18,11 @@ import {
 import { PostValidation } from "@/lib/validation";
 import { useUserContext } from "@/context/AuthContext";
 import { FileUploader, Loader } from "@/components/shared";
-import { useCreatePost, useUpdatePost } from "@/lib/react-query/queries";
+import {
+  useCreatePost,
+  useGetCurrentUser,
+  useUpdatePost,
+} from "@/lib/react-query/queries";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
@@ -28,6 +32,8 @@ type PostFormProps = {
 };
 
 const PostForm = ({ post, action }: PostFormProps) => {
+  const { data: currentUser } = useGetCurrentUser();
+
   const router = useRouter();
   const { toast } = useToast();
   const { user } = useUserContext();
@@ -63,6 +69,11 @@ const PostForm = ({ post, action }: PostFormProps) => {
           title: `${action} post failed. Please try again.`,
         });
       }
+
+      toast({
+        title: `${action} post succeeded.`,
+      });
+      
       return router.push(`/posts/${post.$id}`);
     }
 
@@ -84,7 +95,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex flex-col gap-9 w-full  max-w-5xl">
+        className="flex flex-col gap-9 w-full  max-w-5xl"
+      >
         <FormField
           control={form.control}
           name="caption"
@@ -157,14 +169,20 @@ const PostForm = ({ post, action }: PostFormProps) => {
         <div className="flex gap-4 items-center justify-end">
           <Button
             type="button"
-            className="shad-button_dark_4"
-            onClick={() => router.back()}>
+            className="bg-gray-800 text-white rounded-full whitespace-nowrap"
+            onClick={() => router.back()}
+          >
             Cancel
           </Button>
           <Button
             type="submit"
-            className="shad-button_primary whitespace-nowrap"
-            disabled={isLoadingCreate || isLoadingUpdate}>
+            className={`rounded-full whitespace-nowrap ${
+              !currentUser
+                ? "bg-gray-400 cursor-not-allowed" // Background color and cursor for disabled (not logged in)
+                : "shad-button_primary" // Normal background color
+            }`}
+            disabled={!currentUser || isLoadingCreate || isLoadingUpdate}
+          >
             {(isLoadingCreate || isLoadingUpdate) && <Loader />}
             {action} Post
           </Button>

@@ -2,22 +2,23 @@
 import { Loader, UserCard } from "@/components/shared";
 import { useToast } from "@/hooks/use-toast";
 import { useGetUsers } from "@/lib/react-query/queries";
+import { useEffect } from "react";
 
 const page = () => {
   const { toast } = useToast();
 
   const { data: creators, isLoading, isError: isErrorCreators } = useGetUsers();
 
-  if (isErrorCreators) {
-    toast({ title: "Something went wrong." });
-    
-    return;
-  }
+  useEffect(() => {
+    if (isErrorCreators) {
+      toast({ title: "Unable to load the developers." });
+    }
+  }, [isErrorCreators, toast]);
 
   return (
     <div className="common-container">
       <div className="user-container">
-        <h2 className="h3-bold md:h2-bold text-left w-full">All Users</h2>
+        <h2 className="h3-bold md:h2-bold text-left w-full">All Developers</h2>
         {isLoading && !creators ? (
           <Loader />
         ) : (

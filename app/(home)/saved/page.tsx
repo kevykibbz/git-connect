@@ -2,23 +2,26 @@
 import { Models } from "appwrite";
 import { GridPostList, Loader } from "@/components/shared";
 import { useGetCurrentUser } from "@/lib/react-query/queries";
+import Image from "next/image";
 
 const page = () => {
   const { data: currentUser } = useGetCurrentUser();
 
-  const savePosts = currentUser?.save
-    .map((savePost: Models.Document) => ({
-      ...savePost.post,
-      creator: {
-        imageUrl: currentUser.imageUrl,
-      },
-    }))
-    .reverse();
+  const savePosts = currentUser?.saves
+  ? currentUser.saves
+      .map((savePost: Models.Document) => ({
+        ...savePost.post,
+        creator: {
+          imageUrl: currentUser.imageUrl,
+        },
+      }))
+      .reverse()
+  : [];
 
   return (
     <div className="saved-container">
       <div className="flex gap-2 w-full max-w-5xl">
-        <img
+        <Image
           src="/assets/icons/save.svg"
           width={36}
           height={36}

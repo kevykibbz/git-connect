@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { Models } from "appwrite";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { usePathname } from "next/navigation"; 
 
 import { checkIsLiked } from "@/lib/utils";
 import {
@@ -10,6 +10,8 @@ import {
   useDeleteSavedPost,
   useGetCurrentUser,
 } from "@/lib/react-query/queries";
+import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
 
 type PostStatsProps = {
   post: Models.Document;
@@ -17,7 +19,8 @@ type PostStatsProps = {
 };
 
 const PostStats = ({ post, userId }: PostStatsProps) => {
-  const location = useLocation();
+  const pathname=usePathname()
+  const {toast}=useToast()
   const likesList = post.likes.map((user: Models.Document) => user.$id);
 
   const [likes, setLikes] = useState<string[]>(likesList);
@@ -29,18 +32,23 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   const { data: currentUser } = useGetCurrentUser();
 
-  const savedPostRecord = currentUser?.save.find(
-    (record: Models.Document) => record.post.$id === post.$id
-  );
+  const savedPostRecord = currentUser?.save?.length
+  ? currentUser.save.find(
+      (record: Models.Document) => record.post.$id === post.$id
+    )
+  : null;
 
   useEffect(() => {
     setIsSaved(!!savedPostRecord);
   }, [currentUser]);
 
-  const handleLikePost = (
-    e: React.MouseEvent<HTMLImageElement, MouseEvent>
-  ) => {
+  const handleLikePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.stopPropagation();
+
+    if (!currentUser) {
+      toast({title:"You must be logged in to like posts."})
+      return;
+    }
 
     let likesArray = [...likes];
 
@@ -54,10 +62,13 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     likePost({ postId: post.$id, likesArray });
   };
 
-  const handleSavePost = (
-    e: React.MouseEvent<HTMLImageElement, MouseEvent>
-  ) => {
+  const handleSavePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.stopPropagation();
+
+    if (!currentUser) {
+      toast({title:"You must be logged in to like posts."})
+      return;
+    }
 
     if (savedPostRecord) {
       setIsSaved(false);
@@ -68,15 +79,13 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     setIsSaved(true);
   };
 
-  const containerStyles = location.pathname.startsWith("/profile")
-    ? "w-full"
-    : "";
+  // Use router.pathname to determine styles
+  const containerStyles = pathname.startsWith("/profile") ? "w-full" : "";
 
   return (
-    <div
-      className={`flex justify-between items-center z-20 ${containerStyles}`}>
+    <div className={`flex justify-between items-center z-20 ${containerStyles}`}>
       <div className="flex gap-2 mr-5">
-        <img
+        <Image
           src={`${
             checkIsLiked(likes, userId)
               ? "/assets/icons/liked.svg"
@@ -92,7 +101,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       </div>
 
       <div className="flex gap-2">
-        <img
+        <Image
           src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
           alt="share"
           width={20}

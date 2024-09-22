@@ -3,7 +3,7 @@ import { Models } from "appwrite";
 import { Loader, PostCard, UserCard } from "@/components/shared";
 import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 
-const Home = () => {
+const page = () => {
 
   const {
     data: posts,
@@ -20,10 +20,10 @@ const Home = () => {
     return (
       <div className="flex flex-1">
         <div className="home-container">
-          <p className="body-medium text-light-1">Something bad happened</p>
+          <p className="body-medium text-light-1">Unable to load results</p>
         </div>
         <div className="home-creators">
-          <p className="body-medium text-light-1">Something bad happened</p>
+          <p className="body-medium text-light-1">Unable to load results</p>
         </div>
       </div>
     );
@@ -49,7 +49,7 @@ const Home = () => {
       </div>
 
       <div className="home-creators">
-        <h3 className="h3-bold text-light-1">Top Creators</h3>
+        <h3 className="h3-bold text-light-1">Top Developers</h3>
         {isUserLoading && !creators ? (
           <Loader />
         ) : (
@@ -66,4 +66,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default page;
