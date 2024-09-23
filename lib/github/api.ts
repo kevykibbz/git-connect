@@ -8,12 +8,14 @@ export async function getGithubRepos(page: number, limit: number) {
     }
   );
 
+
   // Check if the response is okay
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.message || "Failed to fetch repositories");
   }
 
+  
   // Parse the response data
   const { repos } = await response.json();
 
