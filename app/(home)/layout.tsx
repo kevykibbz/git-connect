@@ -52,7 +52,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#4a4aec" />
+        <meta name="theme-color" content="#877eff" />
         <meta name="copyright" content="GitConnect" />
         <meta name="keywords" content="GitConnect, Web Developer, Frontend Developer, Backend Developer, Full Stack Developer, Software Engineer, JavaScript, React.js, Node.js, HTML, CSS, SEO, Portfolio"/>
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />

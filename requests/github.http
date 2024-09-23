@@ -1,0 +1,1 @@
+GET http://localhost:3000/api/github/callback?code=1234567&state=some-state

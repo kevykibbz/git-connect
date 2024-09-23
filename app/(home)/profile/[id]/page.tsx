@@ -7,6 +7,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
+import { Drawer } from "@/components/ui/drawer";
+import { useState } from "react";
+import GithubDrawer from "@/components/shared/GithubDrawer";
 
 interface StabBlockProps {
   value: string | number;
@@ -34,12 +37,19 @@ const Page = () => {
       </div>
     );
 
-  const followDeveloper=():void =>{
+  const followDeveloper = (): void => {
     if (!currentLoggedInUser) {
       toast({ title: `You must be logged in to follow ${currentUser.name}.` });
       return;
     }
-  }
+  };
+
+
+  const handleOpenDrawer = () => {
+  };
+
+  const handleCloseDrawer = () => {
+  };
 
   return (
     <div className="profile-container">
@@ -80,24 +90,27 @@ const Page = () => {
           </div>
 
           <div className="flex justify-center gap-4">
-            <div className={`${user.id !== currentUser.$id && "hidden"}`}>
+            <div
+              className={`${
+                user.id !== currentUser.$id && "hidden"
+              } flex space-x-4`}
+            >
               <Link
                 href={`/update-profile/${currentUser.$id}`}
-                className={`h-12 bg-dark-4 px-5 text-light-1 flex-center gap-2 rounded-full ${
-                  user.id !== currentUser.$id && "hidden"
-                }`}
+                className="h-12 bg-dark-4 px-5 text-light-1 flex items-center gap-2 rounded-full"
               >
                 <Image
-                  src={"/assets/icons/edit.svg"}
+                  src="/assets/icons/edit.svg"
                   alt="edit"
                   width={20}
                   height={20}
                 />
-                <p className="flex whitespace-nowrap small-medium">
-                  Edit Profile
-                </p>
+                <p className="whitespace-nowrap text-sm">Edit Profile</p>
               </Link>
+
+              <GithubDrawer userId={id}/>
             </div>
+
             <div className={`${user.id === id && "hidden"}`}>
               <Button
                 type="button"

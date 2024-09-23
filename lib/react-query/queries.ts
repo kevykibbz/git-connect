@@ -30,6 +30,7 @@ import {
 } from "@/lib/appwrite/api";
 import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { Models } from "appwrite";
+import { getGithubRepos } from "../github/api";
 
 // ============================================================
 // AUTH QUERIES
@@ -250,5 +251,13 @@ export const useUpdateUser = () => {
         queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
       });
     },
+  });
+};
+
+
+export const useGetGithubRepos = (page:number,limit: number) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_GITHHUB_REPOS,page,limit],
+    queryFn: () => getGithubRepos(page, limit),
   });
 };
