@@ -1,3 +1,5 @@
+import { Repository } from "@/types";
+
 export async function getGithubRepos(page: number, limit: number) {
   const response = await fetch(
     `/api/github/repositories?page=${page}&limit=${limit}`,
@@ -16,10 +18,9 @@ export async function getGithubRepos(page: number, limit: number) {
   const { repos } = await response.json();
 
   // Return only the required fields
-  return repos.map((repo: any) => ({
+  return repos.map((repo: Repository) => ({
     id: repo.id,
     name: repo.name,
-    avatar_url: repo.owner.avatar_url,
     html_url: repo.html_url,
   }));
 }

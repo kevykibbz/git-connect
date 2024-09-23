@@ -23,13 +23,10 @@ import Image from "next/image";
 import { useGetGithubRepos } from "@/lib/react-query/queries";
 import Link from "next/link";
 import { Loader } from "@/components/shared";
+import { Repository } from "@/types";
 
 // Define a Repository type with the required fields
-interface Repository {
-  id: number;
-  name: string;
-  html_url: string;
-}
+
 
 const GithubDrawer = ({ userId }: { userId: string }) => {
   const [open, setOpen] = React.useState(false);
@@ -135,7 +132,6 @@ function RepoForm() {
   const {
     data: repositories,
     isPending: isReposLoading,
-    isError,
   } = useGetGithubRepos(page, limit);
   return (
     <>

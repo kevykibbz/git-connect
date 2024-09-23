@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
 
     // Calculate the offset for pagination
     const perPage = limit;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const offset = (page - 1) * limit;
 
     const response = await fetch(`https://api.github.com/user/repos?per_page=${perPage}&page=${page}`, {

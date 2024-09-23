@@ -7,8 +7,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
-import { Drawer } from "@/components/ui/drawer";
-import { useState } from "react";
 import GithubDrawer from "@/components/shared/GithubDrawer";
 
 interface StabBlockProps {
@@ -44,12 +42,6 @@ const Page = () => {
     }
   };
 
-
-  const handleOpenDrawer = () => {
-  };
-
-  const handleCloseDrawer = () => {
-  };
 
   return (
     <div className="profile-container">

@@ -53,3 +53,9 @@ export type IAuthUser = {
   email: string;
   password: string;
 };
+
+export type Repository={
+  id: number;
+  name: string;
+  html_url: string;
+}
