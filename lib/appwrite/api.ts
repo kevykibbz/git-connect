@@ -1,4 +1,4 @@
-import { ID, ImageGravity, Query } from "appwrite";
+import { ID, ImageGravity, Models, Query } from "appwrite";
 
 import { appwriteConfig, account, databases, storage, avatars } from "./config";
 import {
@@ -417,25 +417,127 @@ export async function deletePost(postId?: string, imageId?: string) {
   }
 }
 
-// ============================== LIKE / UNLIKE POST
-export async function likePost(postId: string, likesArray: string[]) {
+// ============================== LIKE  POST
+export async function likePost(postId: string, userId: string): Promise<Models.Document | undefined> {
   try {
-    const updatedPost = await databases.updateDocument(
+    // Step 1: Check if the user has already liked this post
+    const existingLikes = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      postId,
+      appwriteConfig.likesCollectionId,
+      [
+        Query.equal("userId", userId),  // Check if the user has already liked
+        Query.equal("postId", postId)   // Check the post
+      ]
+    );
+
+    // If the user has already liked the post, do nothing and return
+    if (existingLikes.total > 0) {
+      console.log("User has already liked this post.");
+      return undefined;
+    }
+
+    // Step 2: Proceed to like the post if no previous like was found
+    const newLike = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.likesCollectionId,
+      ID.unique(),
       {
-        likes: likesArray,
+        userId: userId,
+        postId: postId,
+        users:userId,
+        post_likes:postId,
+        createdAt: new Date().toISOString(),
       }
     );
 
-    if (!updatedPost) throw Error;
+    // Step 3: Check and delete existing unlike record, if any
+    const unlikes = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.unlikesCollectionId,
+      [
+        Query.equal("userId", userId),  // Filter by the same user
+        Query.equal("postId", postId)    // Filter by the same post
+      ]
+    );
 
-    return updatedPost;
+    if (unlikes.total > 0) {
+      const unlikeDocumentId = unlikes.documents[0].$id;
+      await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.unlikesCollectionId,
+        unlikeDocumentId
+      );
+    }
+
+    return newLike; // Return the newly created like document
+
   } catch (error) {
-    console.log(error);
+    console.log("Error liking the post:", error);
   }
 }
+
+
+
+// ============================== UNLIKE  POST
+export async function unlikePost(postId: string, userId: string): Promise<Models.Document | undefined> {
+  try {
+    // Step 1: Check if the user has already unliked this post
+    const existingUnlikes = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.unlikesCollectionId,
+      [
+        Query.equal("userId", userId),  // Check if the user has already unliked
+        Query.equal("postId", postId)   // Check the post
+      ]
+    );
+
+    // If the user has already unliked the post, do nothing and return
+    if (existingUnlikes.total > 0) {
+      console.log("User has already unliked this post.");
+      return undefined;
+    }
+
+    // Step 2: Proceed to unlike the post if no previous unlike was found
+    const newUnlike = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.unlikesCollectionId, 
+      ID.unique(),
+      {
+        userId: userId,
+        postId: postId,
+        users:userId,
+        post_unlikes:postId,
+        createdAt: new Date().toISOString(),
+      }
+    );
+
+    // Step 3: Check and delete existing like record, if any
+    const likes = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.likesCollectionId, // Likes collection
+      [
+        Query.equal("userId", userId),  // Filter by the same user
+        Query.equal("postId", postId)    // Filter by the same post
+      ]
+    );
+
+    if (likes.total > 0) {
+      const likeDocumentId = likes.documents[0].$id;
+      await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.likesCollectionId, // Likes collection
+        likeDocumentId
+      );
+    }
+
+    return newUnlike; // Return the newly created unlike document
+
+  } catch (error) {
+    console.log("Error creating unlike reaction:", error);
+  }
+}
+
+
 
 // ============================== SAVE POST
 export async function savePost(userId: string, postId: string) {

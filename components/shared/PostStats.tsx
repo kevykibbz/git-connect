@@ -1,72 +1,105 @@
-"use client";
-import { Models } from "appwrite";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation"; 
-
-import { checkIsLiked } from "@/lib/utils";
+"use client"
+import { ThumbUp, ThumbDown } from '@mui/icons-material'; // Material UI Icons
+import { useState, useEffect } from 'react';
 import {
   useLikePost,
-  useSavePost,
-  useDeleteSavedPost,
+  useUnLikePost,
   useGetCurrentUser,
-} from "@/lib/react-query/queries";
-import Image from "next/image";
-import { useToast } from "@/hooks/use-toast";
+  useDeleteSavedPost,
+  useSavePost,
+} from '@/lib/react-query/queries';
+import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import { Models } from 'appwrite';
+import { usePathname } from 'next/navigation';
+import Loader from './Loader';
 
 type PostStatsProps = {
   post: Models.Document;
   userId: string;
+  refetchPost: () => void; // Function to refetch post data
 };
 
-const PostStats = ({ post, userId }: PostStatsProps) => {
-  const pathname=usePathname()
-  const {toast}=useToast()
-  const likesList = post.likes.map((user: Models.Document) => user.$id);
+const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
+  const { toast } = useToast();
+  const pathname = usePathname();
 
-  const [likes, setLikes] = useState<string[]>(likesList);
+  // Extract likes and unlikes from post arrays
+  const likesList = post.post_liked?.map((like: Models.Document) => like.userId) || [];
+  const unlikesList = post.post_unliked?.map((unlike: Models.Document) => unlike.userId) || [];
   const [isSaved, setIsSaved] = useState(false);
 
-  const { mutate: likePost } = useLikePost();
-  const { mutate: savePost } = useSavePost();
-  const { mutate: deleteSavePost } = useDeleteSavedPost();
+  const [likes, setLikes] = useState<string[]>(likesList);
+  const [unlikes, setUnlikes] = useState<string[]>(unlikesList);
 
+  const { mutate: likePost, isPending: isLiking } = useLikePost();
+  const { mutate: unlikePost, isPending: isUnliking } = useUnLikePost();
+  const { mutate: savePost } = useSavePost();
+  const { mutate: deleteSavePost } = useDeleteSavedPost()
   const { data: currentUser } = useGetCurrentUser();
 
-  const savedPostRecord = currentUser?.saves?.length
-  ? currentUser.saves.find(
-      (record: Models.Document) => record.post.$id === post.$id
-    )
-  : null;
-
   useEffect(() => {
-    setIsSaved(!!savedPostRecord);
-  }, [currentUser,savedPostRecord]);
+    // Update likes and unlikes when the post changes
+    setLikes(likesList);
+    setUnlikes(unlikesList);
+  }, [post]);
 
-  const handleLikePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  const handleLikePost = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
 
     if (!currentUser) {
-      toast({title:"You must be logged in to like posts."})
+      toast({ title: 'You must be logged in to like posts.' });
       return;
     }
 
-    let likesArray = [...likes];
+    if (!likes.includes(userId)) {
+      likePost(
+        { postId: post.$id, userId: currentUser.$id },
+        {
+          onSuccess: () => {
+            refetchPost(); // Refresh post data after successful like
+          },
+        }
+      );
+    }
+  };
 
-    if (likesArray.includes(userId)) {
-      likesArray = likesArray.filter((Id) => Id !== userId);
-    } else {
-      likesArray.push(userId);
+  const handleUnlikePost = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+    e.stopPropagation();
+
+    if (!currentUser) {
+      toast({ title: 'You must be logged in to unlike posts.' });
+      return;
     }
 
-    setLikes(likesArray);
-    likePost({ postId: post.$id, likesArray });
+    if (!unlikes.includes(userId)) {
+      unlikePost(
+        { postId: post.$id, userId: currentUser.$id },
+        {
+          onSuccess: () => {
+            refetchPost(); // Refresh post data after successful unlike
+          },
+        }
+      );
+    }
   };
+
+  // Check if the current post is saved by the user
+  const savedPostRecord = currentUser?.saves?.length
+    ? currentUser.saves.find(
+        (record: Models.Document) => record.post.$id === post.$id
+      )
+    : null;
+
+  useEffect(() => {
+    setIsSaved(!!savedPostRecord);
+  }, [currentUser, savedPostRecord]);
 
   const handleSavePost = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
     e.stopPropagation();
 
     if (!currentUser) {
-      toast({title:"You must be logged in to like posts."})
+      toast({ title: "You must be logged in to save posts." });
       return;
     }
 
@@ -79,31 +112,30 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     setIsSaved(true);
   };
 
-  // Use router.pathname to determine styles
-  const containerStyles = pathname.startsWith("/profile") ? "w-full" : "";
-
+   // Use pathname to determine styles
+   const containerStyles = pathname.startsWith("/profile") ? "w-full" : "";
   return (
     <div className={`flex justify-between items-center z-20 ${containerStyles}`}>
       <div className="flex gap-2 mr-5">
-        <Image
-          src={`${
-            checkIsLiked(likes, userId)
-              ? "/assets/icons/liked.svg"
-              : "/assets/icons/like.svg"
-          }`}
-          alt="like"
-          width={20}
-          height={20}
-          onClick={(e) => handleLikePost(e)}
-          className="cursor-pointer"
+        {/* Thumbs Up Icon for liking the post */}
+        <ThumbUp
+          style={{ cursor: 'pointer', color: likes.includes(userId) ? '#877eff' : 'gray' }}
+          onClick={handleLikePost}
         />
         <p className="small-medium lg:base-medium">{likes.length}</p>
-      </div>
 
+        {/* Thumbs Down Icon for unliking the post */}
+        <ThumbDown
+          style={{ cursor: 'pointer', color: unlikes.includes(userId) ? '#877eff' : 'gray' }}
+          onClick={handleUnlikePost}
+        />
+        <p className="small-medium lg:base-medium">{unlikes.length}</p>
+        {(isLiking || isUnliking)  && <Loader/>}
+      </div>
       <div className="flex gap-2">
         <Image
           src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
-          alt="share"
+          alt="save"
           width={20}
           height={20}
           className="cursor-pointer"

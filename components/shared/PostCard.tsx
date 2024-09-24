@@ -89,7 +89,9 @@ const PostCard = ({ post }: PostCardProps) => {
           />
         )}
       </Link>
-      <PostStats post={post} userId={user?.id || ""} />{" "}
+      <PostStats post={post} userId={user?.id || ""} refetchPost={function (): void {
+        throw new Error("Function not implemented.");
+      } } />{" "}
       <div className="mt-2">
         {post.comments && post.comments.length > 0 && (
           <>

@@ -30,6 +30,7 @@ import {
   deleteSavedPost,
   createComment,
   getRecentComments,
+  unlikePost,
 } from "@/lib/appwrite/api";
 import { INewPost, INewUser, IUComment, IUpdatePost, IUpdateUser } from "@/types";
 import { Models } from "appwrite";
@@ -157,11 +158,39 @@ export const useLikePost = () => {
   return useMutation({
     mutationFn: ({
       postId,
-      likesArray,
+      userId,
     }: {
       postId: string;
-      likesArray: string[];
-    }) => likePost(postId, likesArray),
+      userId:string;
+    }) => likePost(postId, userId),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POSTS],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
+
+
+export const useUnLikePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      postId,
+      userId,
+    }: {
+      postId: string;
+      userId:string;
+    }) => unlikePost(postId, userId),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
