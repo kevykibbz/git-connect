@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GitConnect
 
-## Getting Started
+## NextJS Social Network for Developers
 
-First, run the development server:
+GitConnect allows developers to create a developer profile/portfolio, share posts, and get help from other developers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Table of Contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Main Features](#main-features)
+- [Requirements (Tech Stack)](#requirements-tech-stack)
+- [Live Demo](#live-demo)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Main Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Your task is to complete the GitConnect application by adding the following features:
 
-## Learn More
+- **Sign Up and Sign In**: Users can create accounts and log in to access their profiles.
+- **List All Registered Developers**: A public list displaying all registered developers.
+- **Developer Profile Page**: Each profile contains:
+  - Personal details
+  - Education
+  - Work experience
+  - GitHub repositories
+- **Edit Profile**: Users can update their personal information.
+- **Post Management**: Users can view, add, delete, and like/dislike posts.
+- **Comments and Discussions**: Users can comment on posts, view the number of likes and dislikes, and discuss posts.
 
-To learn more about Next.js, take a look at the following resources:
+### Public Access
+The following can be accessed publicly:
+- List of all registered developers
+- Profiles of each developer
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Requirements (Tech Stack)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js**
+- **TypeScript**
+- **Appwrite** for backend
+- **TailwindCSS**
 
-## Deploy on Vercel
+## Live Demo
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can view the live application at: [GitConnect Live](https://git-connect-6bro.vercel.app/)
