@@ -39,8 +39,8 @@ const LeftSidebar = () => {
           />
         </Link>
 
-        {isAuthenticated ? (
-          isLoading ? (
+        {isAuthenticated &&
+          (isLoading ? (
             <div className="h-14">
               <Loader />
             </div>
@@ -49,34 +49,29 @@ const LeftSidebar = () => {
               href={`/profile/${user.id}`}
               className="flex gap-3 items-center"
             >
-              <Image
-                width={14}
-                height={14}
-                src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
-                alt="profile"
-                className="h-14 w-14 rounded-full"
-              />
+              {user.imageUrl ? (
+                <Image
+                  width={14}
+                  height={14}
+                  src={user.imageUrl} // User's profile image
+                  alt="profile"
+                  className="h-14 w-14 rounded-full"
+                />
+              ) : (
+                <Image
+                  width={14}
+                  height={14}
+                  src="/assets/icons/profile-placeholder.svg" // Fallback if no imageUrl
+                  alt="profile placeholder"
+                  className="h-14 w-14 rounded-full"
+                />
+              )}
               <div className="flex flex-col">
                 <p className="body-bold">{user.name}</p>
                 <p className="small-regular text-light-3">@{user.username}</p>
               </div>
             </Link>
-          )
-        ) : (
-          <div className="flex gap-3 items-center">
-            <Image
-              width={14}
-              height={14}
-              src="/assets/icons/profile-placeholder.svg" // Fallback image
-              alt="fallback profile"
-              className="h-14 w-14 rounded-full"
-            />
-            <div className="flex flex-col">
-              <p className="body-bold">Guest User</p>
-              <p className="small-regular text-light-3">@guest</p>
-            </div>
-          </div>
-        )}
+          ))}
 
         <ul className="flex flex-col gap-6">
           {sidebarLinks.map((link: INavLink) => {
@@ -101,7 +96,9 @@ const LeftSidebar = () => {
                 : ""
             }
             ${
-              !isAuthenticated && isSaved ? "pointer-events-none opacity-50 cursor-not-allowed" : ""
+              !isAuthenticated && isSaved
+                ? "pointer-events-none opacity-50 cursor-not-allowed"
+                : ""
             }
             group-hover:bg-primary-500 group-hover:text-white`}
                 >

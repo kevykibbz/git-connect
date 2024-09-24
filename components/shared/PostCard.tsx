@@ -4,6 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { multiFormatDateString } from "@/lib/utils";
 import PostStats from "./PostStats";
+import CommentForm from "../forms/CommentForm";
+import { IUComment } from "@/types";
+
+
 type PostCardProps = {
   post: Models.Document;
 };
@@ -58,7 +62,6 @@ const PostCard = ({ post }: PostCardProps) => {
           </Link>
         )}
       </div>
-
       <Link href={`/posts/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
@@ -86,8 +89,35 @@ const PostCard = ({ post }: PostCardProps) => {
           />
         )}
       </Link>
-
-      <PostStats post={post} userId={user?.id || ""} />
+      <PostStats post={post} userId={user?.id || ""} />{" "}
+      <div className="mt-2">
+        {post.comments && post.comments.length > 0 && (
+          <>
+            <h2>{post.comments.length.toLocaleString()} comments</h2>
+            <ul className="mt-2 list-disc space-y-2 text-gray-500">
+              {post.comments.slice(0, 2).map((comment: IUComment) => (
+                <li key={comment.$id} className="flex justify-between">
+                  <p className="line-clamp-2">{comment.comment}</p>
+                  <p className="text-sm font-bold">
+                    &middot; {multiFormatDateString(comment.createdAt)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            {post.comments.length > 2 && (
+              <div className="flex mt-3 justify-end ">
+                <Link
+                  href={`/posts/${post.$id}/comments`}
+                  className=" text-blue-500 hover:underline"
+                >
+                  View more
+                </Link>
+              </div>
+            )}
+          </>
+        )}
+        <CommentForm postId={post.$id} />
+      </div>
     </div>
   );
 };

@@ -59,3 +59,12 @@ export type Repository={
   name: string;
   html_url: string;
 }
+
+
+export type IUComment={
+  $id?: string;
+  userId: string;
+  postId: string;
+  comment: string;
+  createdAt?:string
+}

@@ -5,6 +5,7 @@ import {
   useInfiniteQuery,
   QueryFunction,
   QueryKey,
+  QueryFunctionContext,
 } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/lib/react-query/queryKeys";
@@ -27,8 +28,10 @@ import {
   searchPosts,
   savePost,
   deleteSavedPost,
+  createComment,
+  getRecentComments,
 } from "@/lib/appwrite/api";
-import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
+import { INewPost, INewUser, IUComment, IUpdatePost, IUpdateUser } from "@/types";
 import { Models } from "appwrite";
 import { getGithubRepos } from "../github/api";
 
@@ -259,5 +262,31 @@ export const useGetGithubRepos = (page:number,limit: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_GITHHUB_REPOS,page,limit],
     queryFn: () => getGithubRepos(page, limit),
+  });
+};
+
+
+export const useCreateComment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (commentdata: IUComment) => createComment(commentdata),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_COMMENTS],
+      });
+    },
+  });
+};
+
+
+
+export const useGetRecentComments = (postId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_RECENT_COMMENTS, postId], // postId in queryKey
+    queryFn: ({ queryKey }: QueryFunctionContext) => {
+      const extractedPostId = queryKey[1] as string; // Extract postId from queryKey
+      return getRecentComments(extractedPostId); // Pass the postId to the getRecentComments function
+    },
+    enabled: !!postId, // Enable query only if postId is valid
   });
 };

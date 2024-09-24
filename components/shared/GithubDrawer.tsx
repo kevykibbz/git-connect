@@ -133,6 +133,7 @@ function RepoForm() {
     data: repositories,
     isPending: isReposLoading,
   } = useGetGithubRepos(page, limit);
+
   return (
     <>
       <div className="mt-4">
@@ -145,18 +146,22 @@ function RepoForm() {
         ) : (
           <>
             <ul className="list-disc space-y-2 text-gray-500">
-              {repositories.map((repo: Repository, idx: number) => (
-                <li key={repo.id} className="capitalize">
-                  <Link
-                    href={repo.html_url}
-                    key={repo.id}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {`${(page - 1) * limit + (idx + 1)}.`} {repo.name}
-                  </Link>
-                </li>
-              ))}
+              {Array.isArray(repositories) && repositories.length > 0 ? (
+                repositories.map((repo: Repository, idx: number) => (
+                  <li key={repo.id} className="capitalize">
+                    <Link
+                      href={repo.html_url}
+                      key={repo.id}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {`${(page - 1) * limit + (idx + 1)}.`} {repo.name}
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <li className="text-center mt-2">No repositories found.</li> // Optional message if no repos
+              )}
             </ul>
             <div className="mt-4 flex justify-between">
               <button

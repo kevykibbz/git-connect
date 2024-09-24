@@ -7,6 +7,7 @@ import {
   INewUser,
   IUpdateUser,
   IAuthUser,
+  IUComment,
 } from "@/types";
 
 // ============================================================
@@ -611,5 +612,72 @@ export async function updateUser(user: IUpdateUser) {
     return updatedUser;
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+export async function isPostValid(postId: string) {
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    );
+    return post ? true : false; // Return true if post exists
+  } catch (error) {
+    console.error("Error fetching post:", error);
+    return false; // Return false if there's an error
+  }
+}
+
+
+export async function createComment(commentData: IUComment) {
+  // Validate postId
+  const isValidPost = await isPostValid(commentData.postId);
+  if (!isValidPost) {
+    throw new Error("Invalid postId. Comment cannot be created.");
+  }
+  try {
+    const newComment = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentsCollectionId,
+      ID.unique(),{
+        user: commentData.userId,
+        post: commentData.postId,
+        comment: commentData.comment,
+        createdAt: new Date().toISOString(),
+      }
+    );
+
+    return newComment;
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    throw new Error("Failed to create comment");
+  }
+}
+
+export async function getRecentComments(postId: string) {
+  try {
+    // Check if postId is valid
+    if (!postId) {
+      throw new Error("Invalid postId");
+    }
+
+    const comments = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.commentsCollectionId,
+      [
+        Query.equal('post', postId), // Filter by postId
+        Query.orderDesc('$createdAt'), // Order by creation date, descending
+        Query.limit(20), // Limit to the most recent 20 comments
+      ]
+    );
+
+    if (!comments) throw new Error("No comments found");
+
+    return comments;
+  } catch (error) {
+    console.error("Error fetching recent comments:", error);
+    throw new Error("Failed to fetch comments");
   }
 }

@@ -187,7 +187,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             }`}
             disabled={!currentUser || isLoadingCreate || isLoadingUpdate}
           >
-            {(isLoadingCreate || isLoadingUpdate) && <Loader />}
+            {(isLoadingCreate || isLoadingUpdate) && <Loader  />}
             {action} Post
           </Button>
         </div>

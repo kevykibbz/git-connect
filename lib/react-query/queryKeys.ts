@@ -19,5 +19,9 @@ export enum QUERY_KEYS {
   SEARCH_POSTS = "getSearchPosts",
 
   //GITHUB REPOS
-  GET_GITHHUB_REPOS='getGithubRepositories'
+  GET_GITHHUB_REPOS='getGithubRepositories',
+
+  // GET COMMENTS
+  GET_COMMENTS = "getComments",
+  GET_RECENT_COMMENTS="getRecentComments",
 }

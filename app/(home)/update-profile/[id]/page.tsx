@@ -43,7 +43,6 @@ const Page = () => {
   const { mutateAsync: updateUser, isPending: isLoadingUpdate } =
     useUpdateUser();
 
-    console.log('currentUser:',currentUser)
   if (!currentUser)
     return (
       <div className="flex-center w-full h-full">
@@ -206,7 +205,6 @@ const Page = () => {
                 </FormItem>
               )}
             />
-
             <div className="flex gap-4 items-center w-full justify-end">
               <Button
                 type="button"
