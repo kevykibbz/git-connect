@@ -51,7 +51,9 @@ const GridPostList = ({
                 <p className="line-clamp-1">{post.creator.name}</p>
               </div>
             )}
-            {showStats && <PostStats post={post} userId={user.id} />}
+            {showStats && <PostStats post={post} userId={user.id} refetchPost={function (): void {
+              throw new Error("Function not implemented.");
+            } } />}
           </div>
         </li>
       ))}

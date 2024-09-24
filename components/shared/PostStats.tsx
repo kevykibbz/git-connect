@@ -1,6 +1,6 @@
 "use client"
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   useLikePost,
   useUnLikePost,
@@ -24,9 +24,18 @@ const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
   const { toast } = useToast();
   const pathname = usePathname();
 
+  // Use useMemo to memoize likes and unlikes list
   // Extract likes and unlikes from post arrays
-  const likesList = post.post_liked?.map((like: Models.Document) => like.userId) || [];
-  const unlikesList = post.post_unliked?.map((unlike: Models.Document) => unlike.userId) || [];
+  const likesList = useMemo(() => 
+    post.post_liked?.map((like: Models.Document) => like.userId) || [], 
+    [post.post_liked]
+  );
+  
+  const unlikesList = useMemo(() => 
+    post.post_unliked?.map((unlike: Models.Document) => unlike.userId) || [], 
+    [post.post_unliked]
+  );
+
   const [isSaved, setIsSaved] = useState(false);
 
   const [likes, setLikes] = useState<string[]>(likesList);
@@ -42,7 +51,7 @@ const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
     // Update likes and unlikes when the post changes
     setLikes(likesList);
     setUnlikes(unlikesList);
-  }, [post]);
+  }, [post,likesList,unlikesList]);
 
   const handleLikePost = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
     e.stopPropagation();
