@@ -27,15 +27,17 @@ const Page = () => {
   const postId = pathname.split("/")[2] || "";
   const router=useRouter()
 
-  if (!postId) {
-    return <div>Error: Post ID not found.</div>;
-  }
-
   const {
     data: comments,
     isLoading: isCommentsLoading,
     isError: isErrorComments,
   } = useGetRecentComments(postId);
+  
+  if (!postId) {
+    return <div>Error: Post ID not found.</div>;
+  }
+
+ 
 
   // Handling loading state
   if (isCommentsLoading) {
