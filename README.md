@@ -4,6 +4,8 @@
 
 GitConnect allows developers to create a developer profile/portfolio, share posts, and get help from other developers.
 
+![GitConnect Preview](public/assets/images/gitconnect.png)
+
 ## Table of Contents
 
 - [Main Features](#main-features)
