@@ -163,16 +163,16 @@ function RepoForm() {
                 <li className="text-center mt-2">No repositories found.</li> // Optional message if no repos
               )}
             </ul>
-            <div className="mt-4 flex justify-between">
+            <div className="mt-4 mb-2 flex px-2 justify-between">
               <button
-                className="px-4 py-2 border rounded-full"
+                className="px-4 py-2 border rounded-full mx-2"
                 disabled={page === 1}
                 onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
               >
                 Previous
               </button>
               <button
-                className="px-4 py-2 border rounded-full"
+                className="px-4 py-2 border rounded-full mx-2"
                 onClick={() => setPage((prev: number) => prev + 1)}
               >
                 Next
