@@ -1,5 +1,5 @@
 "use client"
-import { ThumbUp, ThumbDown } from '@mui/icons-material'; // Material UI Icons
+import { ThumbUp, ThumbDown } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import {
   useLikePost,
