@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { Models } from 'appwrite';
 import { usePathname } from 'next/navigation';
 import Loader from './Loader';
+import { useUserContext } from '@/context/AuthContext';
 
 type PostStatsProps = {
   post: Models.Document;
@@ -23,6 +24,8 @@ type PostStatsProps = {
 const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
   const { toast } = useToast();
   const pathname = usePathname();
+  const { isAuthenticated } = useUserContext();
+
 
   // Use useMemo to memoize likes and unlikes list
   // Extract likes and unlikes from post arrays
@@ -125,21 +128,27 @@ const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
    const containerStyles = pathname.startsWith("/profile") ? "w-full" : "";
   return (
     <div className={`flex justify-between items-center z-20 ${containerStyles}`}>
-      <div className="flex gap-2 mr-5">
+       <div className="flex gap-2 mr-5">
         {/* Thumbs Up Icon for liking the post */}
         <ThumbUp
-          style={{ cursor: 'pointer', color: likes.includes(userId) ? '#877eff' : 'gray' }}
-          onClick={handleLikePost}
+          style={{
+            cursor: isAuthenticated ? 'pointer' : 'not-allowed',
+            color: likes.includes(userId) ? '#877eff' : 'gray'
+          }}
+          onClick={isAuthenticated ? handleLikePost : undefined} // Disable click if not authenticated
         />
         <p className="small-medium lg:base-medium">{likes.length}</p>
 
         {/* Thumbs Down Icon for unliking the post */}
         <ThumbDown
-          style={{ cursor: 'pointer', color: unlikes.includes(userId) ? '#877eff' : 'gray' }}
-          onClick={handleUnlikePost}
+          style={{
+            cursor: isAuthenticated ? 'pointer' : 'not-allowed',
+            color: unlikes.includes(userId) ? '#877eff' : 'gray'
+          }}
+          onClick={isAuthenticated ? handleUnlikePost : undefined} // Disable click if not authenticated
         />
         <p className="small-medium lg:base-medium">{unlikes.length}</p>
-        {(isLiking || isUnliking)  && <Loader/>}
+        {(isLiking || isUnliking) && <Loader />}
       </div>
       <div className="flex gap-2">
         <Image
