@@ -1,7 +1,7 @@
 "use client"
 import { Models } from "appwrite";
 import { Loader, PostCard, UserCard } from "@/components/shared";
-import { useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
+import { useGetCurrentUser, useGetRecentPosts, useGetUsers } from "@/lib/react-query/queries";
 
 const Page = () => {
 
@@ -15,6 +15,7 @@ const Page = () => {
     isLoading: isUserLoading,
     isError: isErrorCreators,
   } = useGetUsers(10);
+  const { data: currentUser } = useGetCurrentUser();
 
   if (isErrorPosts || isErrorCreators) {
     return (
@@ -54,7 +55,7 @@ const Page = () => {
           <Loader />
         ) : (
           <ul className="grid 2xl:grid-cols-2 gap-6">
-            {creators?.documents.map((creator) => (
+            {creators?.documents?.filter(creator => creator?.$id !== currentUser?.$id).map((creator) => (
               <li key={creator?.$id}>
                 <UserCard user={creator} />
               </li>
