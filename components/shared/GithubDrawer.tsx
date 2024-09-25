@@ -80,7 +80,7 @@ const GithubDrawer = ({ userId }: { userId: string }) => {
             width={20}
             height={20}
           />
-          <p className="whitespace-nowrap text-sm">Connect GitHub</p>
+          <p className="whitespace-nowrap text-sm">Get github Repos</p>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
