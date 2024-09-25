@@ -27,7 +27,6 @@ import { Repository } from "@/types";
 
 // Define a Repository type with the required fields
 
-
 const GithubDrawer = ({ userId }: { userId: string }) => {
   const [open, setOpen] = React.useState(false);
   const [isDesktop, setIsDesktop] = React.useState(false);
@@ -132,6 +131,7 @@ function RepoForm() {
   const {
     data: repositories,
     isPending: isReposLoading,
+    isError: isReposError,
   } = useGetGithubRepos(page, limit);
 
   return (
@@ -146,12 +146,13 @@ function RepoForm() {
         ) : (
           <>
             <ul className="list-disc space-y-2 text-gray-500">
-              {Array.isArray(repositories) && repositories.length > 0 ? (
+              {isReposError || !Array.isArray(repositories) || repositories.length === 0 ? (
+                <li className="text-center mt-2">No repositories found.</li>
+              ) : (
                 repositories.map((repo: Repository, idx: number) => (
                   <li key={repo.id} className="capitalize">
                     <Link
                       href={repo.html_url}
-                      key={repo.id}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -159,10 +160,9 @@ function RepoForm() {
                     </Link>
                   </li>
                 ))
-              ) : (
-                <li className="text-center mt-2">No repositories found.</li> // Optional message if no repos
               )}
             </ul>
+
             <div className="mt-4 mb-2 flex px-2 py-2 justify-between">
               <button
                 className="px-4 py-2 border rounded-full mx-2"

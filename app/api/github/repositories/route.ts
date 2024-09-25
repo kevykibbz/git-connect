@@ -7,39 +7,38 @@ export async function GET(req: NextRequest) {
     const cookieStore = cookies();
     const accessToken = cookieStore.get("github_access_token")?.value;
     
-    // Check if access token is present
-    if (!accessToken) {
-      return NextResponse.json({ error: "Access token is missing" }, { status: 401 });
-    }
-
     // Extract page and limit from query parameters
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "4", 10);
+    
+    // If access token is missing, show message for users without a GitHub account
+    if (!accessToken) {
+      return NextResponse.json({
+        error: "You don't have any GitHub repositories because you're not authenticated with GitHub."
+      }, { status: 401 });
+    }
 
-    // Calculate the offset for pagination
-    const perPage = limit;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const offset = (page - 1) * limit;
+    // If access token is present, fetch user-specific repositories
+    const userReposResponse = await fetch(
+      `https://api.github.com/user/repos?per_page=${limit}&page=${page}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+      }
+    );
 
-    const response = await fetch(`https://api.github.com/user/repos?per_page=${perPage}&page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        Accept: "application/vnd.github.v3+json",
-      },
-    });
-
-    // Check if the response is okay
-    if (!response.ok) {
-      const error = await response.json();
+    // Check if the user repo response is okay
+    if (!userReposResponse.ok) {
+      const error = await userReposResponse.json();
       return NextResponse.json({ error: error.message }, { status: 401 });
     }
 
-    // Parse the response data
-    const repositories = await response.json();
-    // Return the repositories along with pagination info
+    const userRepositories = await userReposResponse.json();
     return NextResponse.json({
-      repos: repositories,
+      repos: userRepositories,
       page,
       limit,
     }, { status: 200 });
