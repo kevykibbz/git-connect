@@ -131,23 +131,25 @@ const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
        <div className="flex gap-2 mr-5">
         {/* Thumbs Up Icon for liking the post */}
         <ThumbUp
+        className="tiny-medium sm:text-base"
           style={{
             cursor: isAuthenticated ? 'pointer' : 'not-allowed',
             color: likes.includes(userId) ? '#877eff' : 'gray'
           }}
           onClick={isAuthenticated ? handleLikePost : undefined} // Disable click if not authenticated
         />
-        <p className="small-medium lg:base-medium">{likes.length}</p>
+        <p className="small-medium lg:base-medium tiny-medium sm:text-base">{likes.length}</p>
 
         {/* Thumbs Down Icon for unliking the post */}
         <ThumbDown
+        className="tiny-medium sm:text-base"
           style={{
             cursor: isAuthenticated ? 'pointer' : 'not-allowed',
             color: unlikes.includes(userId) ? '#877eff' : 'gray'
           }}
           onClick={isAuthenticated ? handleUnlikePost : undefined} // Disable click if not authenticated
         />
-        <p className="small-medium lg:base-medium">{unlikes.length}</p>
+        <p className="small-medium lg:base-medium tiny-medium sm:text-base">{unlikes.length}</p>
         {(isLiking || isUnliking) && <Loader />}
       </div>
       <div className="flex gap-2">
@@ -156,7 +158,7 @@ const PostStats = ({ post, userId, refetchPost }: PostStatsProps) => {
           alt="save"
           width={20}
           height={20}
-          className="cursor-pointer"
+          className="cursor-pointer tiny-medium sm:text-base"
           onClick={(e) => handleSavePost(e)}
         />
       </div>

@@ -83,15 +83,15 @@ const Page = () => {
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
                 <div className="flex gap-1 flex-col">
-                  <p className="base-medium lg:body-bold text-light-1">
+                  <p className="base-medium lg:body-bold text-light-1 tiny-medium sm:text-base">
                     {post?.creator.name}
                   </p>
                   <div className="flex-center gap-2 text-light-3">
-                    <p className="subtle-semibold lg:small-regular ">
+                    <p className="subtle-semibold lg:small-regular tiny-medium sm:text-base">
                       {multiFormatDateString(post?.$createdAt)}
                     </p>
                     •
-                    <p className="subtle-semibold lg:small-regular">
+                    <p className="subtle-semibold lg:small-regular tiny-medium sm:text-base">
                       {post?.location}
                     </p>
                   </div>
@@ -131,12 +131,12 @@ const Page = () => {
             <hr className="border w-full border-dark-4/80" />
 
             <div className="flex flex-col flex-1 w-full small-medium lg:base-regular">
-              <p>{post?.caption}</p>
+              <p className="tiny-medium sm:text-base">{post?.caption}</p>
               <ul className="flex gap-1 mt-2">
                 {post?.tags.map((tag: string, index: string) => (
                   <li
                     key={`${tag}${index}`}
-                    className="text-light-3 small-regular"
+                    className="text-light-3 small-regular tiny-medium sm:text-base"
                   >
                     #{tag}
                   </li>
@@ -155,21 +155,19 @@ const Page = () => {
               <div className="mt-2">
                 {post.comments && post.comments.length > 0 && (
                   <>
-                    <h2>{post.comments.length.toLocaleString()} comments</h2>
+                    <h2 className="tiny-medium sm:text-base">{post.comments.length.toLocaleString()} comments</h2>
                     <ul className="mt-2 list-disc space-y-2 text-gray-500">
                       {post.comments.slice(0, 2).map((comment: IUComment) => (
-                        <li key={comment.$id} className="flex justify-between">
-                          <p className="line-clamp-2">{comment.comment}</p>
-                          <p className="text-sm font-bold">
-                            &middot; {multiFormatDateString(comment.createdAt)}
-                          </p>
+                        <li key={comment.$id} className="flex flex-col">
+                          <p className="line-clamp-2 tiny-medium sm:text-base">{comment.comment}</p>
+                          <p className="text-sm font-bold tiny-medium sm:text-base">{multiFormatDateString(comment.createdAt)}</p>
                         </li>
                       ))}
                     </ul>
                     <div className="flex mt-3 justify-end ">
                       <Link
                         href={`/posts/${post.$id}/comments`}
-                        className=" text-blue-500 hover:underline"
+                        className=" text-blue-500 hover:underline tiny-medium sm:text-base"
                       >
                         View all
                       </Link>
@@ -186,7 +184,7 @@ const Page = () => {
       <div className="w-full max-w-5xl">
         <hr className="border w-full border-dark-4/80" />
 
-        <h3 className="body-bold md:h3-bold w-full my-10">
+        <h3 className="body-bold md:h3-bold w-full my-10 text-center tiny-medium sm:text-base">
           More Related Posts
         </h3>
         {isUserPostLoading || !relatedPosts ? (

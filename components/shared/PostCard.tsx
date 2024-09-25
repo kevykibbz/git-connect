@@ -34,15 +34,13 @@ const PostCard = ({ post }: PostCardProps) => {
           </Link>
 
           <div className="flex flex-col">
-            <p className="base-medium lg:body-bold text-light-1">
+            <p className="base-medium lg:body-bold text-light-1 tiny-medium sm:text-base">
               {post.creator.name}
             </p>
             <div className="flex-center gap-2 text-light-3">
-              <p className="subtle-semibold lg:small-regular">
-                {multiFormatDateString(post.$createdAt)}
-              </p>
+              <p className="subtle-semibold lg:small-regular tiny-medium sm:text-base">{multiFormatDateString(post.$createdAt)}</p>
               •
-              <p className="subtle-semibold lg:small-regular">
+              <p className="subtle-semibold lg:small-regular tiny-medium sm:text-base">
                 {post.location}
               </p>
             </div>
@@ -63,13 +61,13 @@ const PostCard = ({ post }: PostCardProps) => {
       </div>
       <Link href={`/posts/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
-          <p>{post.caption}</p>
+          <p className="tiny-medium sm:text-base">{post.caption}</p>
           {post.tags && post.tags.length > 0 && (
             <ul className="flex gap-1 mt-2">
               {post.tags.map((tag: string, index: number) => (
                 <li
                   key={`${tag}${index}`}
-                  className="text-light-3 small-regular"
+                  className="text-light-3 small-regular tiny-medium sm:text-base"
                 >
                   #{tag}
                 </li>
@@ -98,18 +96,16 @@ const PostCard = ({ post }: PostCardProps) => {
       <div className="mt-2">
         {post.comments && post.comments.length > 0 && (
           <>
-            <h2>{post.comments.length.toLocaleString()} comments</h2>
+            <h2 className="tiny-medium sm:text-base">{post.comments.length.toLocaleString()} comments</h2>
             <ul className="mt-2 list-disc space-y-2 text-gray-500">
               {post.comments.slice(0, 2).map((comment: IUComment) => (
-                <li key={comment.$id} className="flex justify-between">
-                  <p className="line-clamp-2">{comment.comment}</p>
-                  <p className="text-sm font-bold">
-                    &middot; {multiFormatDateString(comment.createdAt)}
-                  </p>
+                <li key={comment.$id} className="flex flex-col">
+                  <p className="line-clamp-2 tiny-medium sm:text-base">{comment.comment}</p>
+                  <p className="text-sm font-bold tiny-medium sm:text-base">{multiFormatDateString(comment.createdAt)}</p>
                 </li>
               ))}
             </ul>
-            <div className="flex mt-3 justify-end ">
+            <div className="flex mt-3 justify-end tiny-medium sm:text-base">
               <Link
                 href={`/posts/${post.$id}/comments`}
                 className=" text-blue-500 hover:underline"

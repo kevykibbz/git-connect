@@ -34,7 +34,7 @@ const Page = () => {
   } = useGetRecentComments(postId);
   
   if (!postId) {
-    return <div>Error: Post ID not found.</div>;
+    return <div className="tiny-medium sm:text-base">Error: Post ID not found.</div>;
   }
 
  
@@ -43,7 +43,7 @@ const Page = () => {
   if (isCommentsLoading) {
     return (
       <div className="w-full flex items-center justify-center min-h-screen">
-        <div className="flex items-center flex-row justify-center gap-2">
+        <div className="flex items-center flex-row justify-center gap-2 tiny-medium sm:text-base">
           <Loader /> Loading...
         </div>
       </div>
@@ -77,11 +77,11 @@ const Page = () => {
         </Button>
       </div>
       <div className="flex-grow overflow-y-auto max-h-[98vh] px-4">
-        <h2 className="mt-2 ml-3">{commentList.length.toLocaleString()} Comments</h2>
+        <h2 className="mt-2 ml-3 tiny-medium sm:text-base">{commentList.length.toLocaleString()} Comments</h2>
 
         {/* Handling case where no comments are available */}
         {commentList.length === 0 ? (
-          <p>No comments yet. Be the first to comment!</p>
+          <p className="tiny-medium sm:text-base">No comments yet. Be the first to comment!</p>
         ) : (
           <div className="space-y-4 mt-2">
             {commentList.map((comment: Models.Document) => (
@@ -97,10 +97,10 @@ const Page = () => {
                   <AvatarFallback>{getInitials(comment.user.name)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-grow">
-                  <h3 className="font-semibold">{comment.user.name}</h3>{" "}
+                  <h3 className="font-semibold tiny-medium sm:text-base">{comment.user.name}</h3>{" "}
                   {/* Assuming userId is displayed here */}
-                  <p>{comment.comment}</p>
-                  <span className="text-sm text-gray-500">
+                  <p className="tiny-medium sm:text-base">{comment.comment}</p>
+                  <span className="text-sm text-gray-500 tiny-medium sm:text-base">
                     {formatDistanceToNow(new Date(comment.createdAt), {
                       addSuffix: true,
                     })}
