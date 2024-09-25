@@ -109,7 +109,7 @@ const GithubDrawer = ({ userId }: { userId: string }) => {
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>GitHub Repositories</DrawerTitle>
-          <DrawerDescription>
+          <DrawerDescription className="tiny-medium sm:text-base">
             Here is a list of all GitHub repositories retrieved.
           </DrawerDescription>
         </DrawerHeader>
@@ -137,7 +137,7 @@ function RepoForm() {
   return (
     <>
       <div className="mt-4">
-        <h3>Your Repositories:</h3>
+        <h3 className="tiny-medium sm:text-base px-4">Your Repositories:</h3>
 
         {isReposLoading ? (
           <div className="p-4 m-4">
@@ -147,10 +147,10 @@ function RepoForm() {
           <>
             <ul className="list-disc space-y-2 text-gray-500">
               {isReposError || !Array.isArray(repositories) || repositories.length === 0 ? (
-                <li className="text-center mt-2">No repositories found.</li>
+                <li className="text-center mt-2 tiny-medium sm:text-base">No repositories found.</li>
               ) : (
                 repositories.map((repo: Repository, idx: number) => (
-                  <li key={repo.id} className="capitalize">
+                  <li key={repo.id} className="capitalize tiny-medium sm:text-base">
                     <Link
                       href={repo.html_url}
                       target="_blank"
@@ -165,14 +165,14 @@ function RepoForm() {
 
             <div className="mt-4 mb-2 flex px-2 py-2 justify-between">
               <button
-                className="px-4 py-2 border rounded-full mx-2"
+                className="px-4 py-2 border rounded-full mx-2 tiny-medium sm:text-base"
                 disabled={page === 1}
                 onClick={() => setPage((prev: number) => Math.max(prev - 1, 1))}
               >
                 Previous
               </button>
               <button
-                className="px-4 py-2 border rounded-full mx-2"
+                className="px-4 py-2 border rounded-full mx-2 tiny-medium sm:text-base"
                 onClick={() => setPage((prev: number) => prev + 1)}
               >
                 Next

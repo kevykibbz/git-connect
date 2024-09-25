@@ -61,7 +61,7 @@ const Page = () => {
           <Image
             src={post?.imageUrl}
             alt="creator"
-            className="post_details-img"
+            className="post_details-img w-full sm:w-[417px]"
             width={417}
             height={320}
           />

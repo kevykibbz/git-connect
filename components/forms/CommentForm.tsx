@@ -116,8 +116,8 @@ const CommentForm = ({postId}:{postId:string}) => {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Add Comment</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="tiny-medium sm:text-base">Add Comment</DialogTitle>
+              <DialogDescription className="tiny-medium sm:text-base">
                 You can write and submit a comment below.
               </DialogDescription>
             </DialogHeader>
@@ -134,7 +134,7 @@ const CommentForm = ({postId}:{postId:string}) => {
                       <FormControl>
                         <Textarea
                           placeholder="Enter your comment"
-                          className="w-full"
+                          className="w-full tiny-medium sm:text-base"
                           disabled={!isAuthenticated}
                           rows={3}
                           {...field}
@@ -146,7 +146,7 @@ const CommentForm = ({postId}:{postId:string}) => {
                 />
                 <Button
                   type="submit"
-                  className="mt-4 shad-button_primary px-5 text-light-1 flex items-center gap-2 rounded-full"
+                  className="mt-4 tiny-medium sm:text-base shad-button_primary px-5 text-light-1 flex items-center gap-2 rounded-full"
                   disabled={isLoadingCreatingComment} 
                 >
                   {isLoadingCreatingComment ? <div className="flex items-center justify-center gap-2"><Loader/> Submitting...</div> : "Submit"}{" "}
@@ -162,8 +162,8 @@ const CommentForm = ({postId}:{postId:string}) => {
         <Drawer open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>Add Comment</DrawerTitle>
-              <DrawerDescription>
+              <DrawerTitle className="tiny-medium sm:text-base">Add Comment</DrawerTitle>
+              <DrawerDescription className="tiny-medium sm:text-base">
                 You can write and submit a comment below.
               </DrawerDescription>
             </DrawerHeader>
@@ -180,7 +180,7 @@ const CommentForm = ({postId}:{postId:string}) => {
                       <FormControl>
                         <Textarea
                           placeholder="Enter your comment"
-                          className="w-full"
+                          className="w-full tiny-medium sm:text-base"
                           disabled={!isAuthenticated}
                           rows={3}
                           {...field}
@@ -193,7 +193,7 @@ const CommentForm = ({postId}:{postId:string}) => {
                 <DrawerFooter className="pt-4 flex items-center gap-4 flex-row justify-between w-full">
                   <DrawerClose asChild>
                     <Button
-                      className="bg-gray-500 text-white flex-grow whitespace-nowrap rounded-l-full"
+                      className="bg-gray-500 tiny-medium sm:text-base text-white flex-grow whitespace-nowrap rounded-l-full"
                       onClick={() => setIsDialogOpen(false)} // Close only when clicking "Close"
                     >
                       Close
@@ -201,7 +201,7 @@ const CommentForm = ({postId}:{postId:string}) => {
                   </DrawerClose>
                   <Button
                   type="submit"
-                  className="shad-button_primary flex-grow whitespace-nowrap rounded-r-full"
+                  className="shad-button_primary tiny-medium sm:text-base flex-grow whitespace-nowrap rounded-r-full"
                   disabled={isLoadingCreatingComment} 
                 >
                   {isLoadingCreatingComment ? <div className="flex items-center justify-center gap-2"><Loader/> Submitting...</div> : "Submit"}{" "}

@@ -97,7 +97,7 @@ const Page = () => {
                   <AvatarFallback>{getInitials(comment.user.name)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-grow">
-                  <h3 className="font-semibold tiny-medium sm:text-base">{comment.user.name}</h3>{" "}
+                  <h3 className="capitalize font-semibold tiny-medium sm:text-base">{comment.user.name}</h3>{" "}
                   {/* Assuming userId is displayed here */}
                   <p className="tiny-medium sm:text-base">{comment.comment}</p>
                   <span className="text-sm text-gray-500 tiny-medium sm:text-base">

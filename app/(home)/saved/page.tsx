@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Models } from "appwrite";
 import { GridPostList, Loader } from "@/components/shared";
 import { useGetCurrentUser } from "@/lib/react-query/queries";
@@ -8,24 +8,24 @@ import { useToast } from "@/hooks/use-toast";
 
 const Page = () => {
   const { data: currentUser } = useGetCurrentUser();
-  const {toast}=useToast()
+  const { toast } = useToast();
   const savePosts = currentUser?.saves
-  ? currentUser.saves
-      .map((savePost: Models.Document) => ({
-        ...savePost.post,
-        creator: {
-          imageUrl: currentUser.imageUrl,
-        },
-      }))
-      .reverse()
-  : [];
+    ? currentUser.saves
+        .map((savePost: Models.Document) => ({
+          ...savePost.post,
+          creator: {
+            imageUrl: currentUser.imageUrl,
+          },
+        }))
+        .reverse()
+    : [];
 
   // Show toast if user is not authenticated
   useEffect(() => {
     if (!currentUser) {
       toast({ title: "You must be logged in to view saved posts." });
     }
-  }, [currentUser,toast]);
+  }, [currentUser, toast]);
   return (
     <div className="saved-container">
       <div className="flex gap-2 w-full max-w-5xl">
@@ -44,7 +44,13 @@ const Page = () => {
       ) : (
         <ul className="w-full flex justify-center max-w-5xl gap-9">
           {savePosts.length === 0 ? (
-            <p className="text-light-4">No available posts</p>
+            <div className="flex justify-center items-center w-full min-h-[300px]">
+              {" "}
+              {/* Centering container */}
+              <p className="text-light-4 tiny-medium sm:text-base">
+                No available posts
+              </p>
+            </div>
           ) : (
             <GridPostList posts={savePosts} showStats={false} />
           )}
