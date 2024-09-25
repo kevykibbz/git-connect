@@ -145,9 +145,13 @@ const Page = () => {
             </div>
 
             <div className="w-full">
-              <PostStats post={post} userId={user.id} refetchPost={function (): void {
+              <PostStats
+                post={post}
+                userId={user.id}
+                refetchPost={function (): void {
                   throw new Error("Function not implemented.");
-                } } />
+                }}
+              />
               <div className="mt-2">
                 {post.comments && post.comments.length > 0 && (
                   <>
@@ -162,16 +166,14 @@ const Page = () => {
                         </li>
                       ))}
                     </ul>
-                    {post.comments.length > 2 && (
-                      <div className="flex mt-3 justify-end ">
-                        <Link
-                          href={`/posts/${post.$id}/comments`}
-                          className=" text-blue-500 hover:underline"
-                        >
-                          View more
-                        </Link>
-                      </div>
-                    )}
+                    <div className="flex mt-3 justify-end ">
+                      <Link
+                        href={`/posts/${post.$id}/comments`}
+                        className=" text-blue-500 hover:underline"
+                      >
+                        View more
+                      </Link>
+                    </div>
                   </>
                 )}
                 <CommentForm postId={post.$id} />
