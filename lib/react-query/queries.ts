@@ -291,6 +291,8 @@ export const useGetGithubRepos = (page:number,limit: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_GITHHUB_REPOS,page,limit],
     queryFn: () => getGithubRepos(page, limit),
+    staleTime:0,
+    refetchOnWindowFocus:true
   });
 };
 
