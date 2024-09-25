@@ -114,7 +114,7 @@ const PostCard = ({ post }: PostCardProps) => {
                 href={`/posts/${post.$id}/comments`}
                 className=" text-blue-500 hover:underline"
               >
-                View more
+                View all
               </Link>
             </div>
           </>
