@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const LOGIN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  const LOGIN_EXPIRATION_TIME:number = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   const checkAuthUser = async () => {
     setIsLoading(true);

@@ -59,7 +59,7 @@ const Page = () => {
       const isLoggedIn = await checkAuthUser();
       if (isLoggedIn) {
         form.reset();
-        router.push("/");
+        router.replace("/");
       } else {
         toast({ title: "Login failed. Please try again." });
       }
