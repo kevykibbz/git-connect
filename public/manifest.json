@@ -1,0 +1,23 @@
+{
+    "name": "GitConnect | Social Network for Developers",
+    "short_name": "GitConnect",
+    "description": "GitConnect allows developers to create a profile/portfolio, share posts, and get help from others.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#877eff",
+    "orientation": "portrait",
+    "icons": [
+      {
+        "src": "/assets/images/favicon-3.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/assets/images/favicon-2.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  
