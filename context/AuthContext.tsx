@@ -1,7 +1,7 @@
 "use client"
 import { createContext, useContext, useEffect, useState } from "react";
 import { IUser } from "@/types";
-import { getCurrentUser } from "@/lib/appwrite/api"; // Ensure this function properly handles unauthenticated users
+import { getCurrentUser } from "@/lib/appwrite/api";
 import { useRouter } from "next/navigation";
 
 export const INITIAL_USER = {
@@ -40,12 +40,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const LOGIN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
   const checkAuthUser = async () => {
     setIsLoading(true);
     try {
       const currentAccount = await getCurrentUser();
 
       if (currentAccount) {
+
+        const loginTimestamp = localStorage.getItem("loginTimestamp");
+
+        // Check if 24 hours have passed
+        if (loginTimestamp && Date.now() - parseInt(loginTimestamp, 10) > LOGIN_EXPIRATION_TIME) {
+          setIsAuthenticated(false);
+          setUser(INITIAL_USER);
+          localStorage.removeItem("loginTimestamp");
+          router.push("/auth/signin"); 
+          return false;
+        }
+
+        // If no login timestamp exists, set it now (first login)
+        if (!loginTimestamp) {
+          localStorage.setItem("loginTimestamp", Date.now().toString());
+        }
         setUser({
           id: currentAccount.$id,
           name: currentAccount.name,
