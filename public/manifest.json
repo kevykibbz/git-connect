@@ -18,6 +18,24 @@
         "sizes": "512x512",
         "type": "image/png"
       }
-    ]
+    ],
+    "screenshots": [
+    {
+      "src": "/assets/screenshots/gitconnect_1280.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/assets/screenshots/gitconnect_640.png",
+      "sizes": "640x960",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["social", "networking", "productivity"],
+  "scope": "/",
+  "related_applications": [],
+  "prefer_related_applications": false
   }
   
